@@ -53,7 +53,7 @@ namespaces = true
 # overwrite this package's files in site-packages. REMOVE this block when
 # discopt v0.6.0 is published.
 [tool.uv.sources]
-discopt = { git = "https://github.com/jkitchin/discopt", branch = "refactor/430-extract-course" }
+discopt = { git = "https://github.com/jkitchin/discopt", branch = "main" }
 
 # Ship the ENTIRE course tree as package data so `discopt tutor` works out of
 # a wheel: lesson notebooks, syllabus/rubrics/writing markdown, the progress
