@@ -29,6 +29,7 @@ tutor = "discopt.course.cli"
 [dependency-groups]
 dev = [
     "pytest>=8",
+    "ruff==0.14.6",  # repo-standard pin (CLAUDE.md); CI runs `uv run ruff`
     "pytest-timeout",
     # docs build
     "jupyter-book<2",
