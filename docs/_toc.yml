@@ -1,0 +1,9 @@
+format: jb-book
+root: intro
+parts:
+  - caption: Getting Started
+    chapters:
+      - file: notebooks/tutor_course
+  - caption: Appendix
+    chapters:
+      - file: references

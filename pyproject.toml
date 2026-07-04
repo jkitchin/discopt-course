@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "discopt-course"
+version = "0.1.0"
+description = "Optimization course + tutor CLI plugin for the discopt modeling language"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "EPL-2.0" }
+authors = [{ name = "John Kitchin", email = "jkitchin@andrew.cmu.edu" }]
+dependencies = [
+    # The "discopt.cli" plugin hook (and the base `discopt` CLI this attaches
+    # the `tutor` subcommand to) land in 0.6.
+    "discopt>=0.6",
+    # The tutor reads/writes the student's progress.yaml; the reset verb and
+    # progress dashboard need PyYAML at runtime.
+    "pyyaml>=6",
+]
+
+# The base discopt CLI discovers plugin subcommands through this group (see
+# the protocol in discopt/cli.py): the entry-point name is the subcommand and
+# the value is a module exposing add_subparser(subparsers) and run(args).
+# This is what keeps `discopt tutor ...` working after the extraction.
+[project.entry-points."discopt.cli"]
+tutor = "discopt.course.cli"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-timeout",
+    # docs build
+    "jupyter-book<2",
+    "sphinxcontrib-bibtex",
+]
+
+# discopt.course is a PEP 420 namespace subpackage: it merges into the
+# ``discopt`` namespace at import time (discopt's __init__ extends its __path__
+# via pkgutil.extend_path). We deliberately package only ``discopt.course`` —
+# never ``discopt`` — so this distribution never shadows the base package.
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["discopt.course*"]
+namespaces = true
+
+# Pre-release window: discopt 0.6 is not on PyPI yet (and not on git main),
+# so resolve it from the extraction branch. That branch has the 0.6 API and
+# has discopt.course removed — branches that still ship discopt.course would
+# overwrite this package's files in site-packages. REMOVE this block when
+# discopt v0.6.0 is published.
+[tool.uv.sources]
+discopt = { git = "https://github.com/jkitchin/discopt", branch = "refactor/430-extract-course" }
+
+# Ship the ENTIRE course tree as package data so `discopt tutor` works out of
+# a wheel: lesson notebooks, syllabus/rubrics/writing markdown, the progress
+# template, the install_skills helper, and the _claude_assets/ slash-command +
+# skill tree. Globs cover every non-.py extension present in the tree.
+[tool.setuptools.package-data]
+"discopt.course" = [
+    "SYLLABUS.md",
+    "README.md",
+    "progress.template.yaml",
+    "install_skills.sh",
+    "**/*.ipynb",
+    "**/*.md",
+    "**/*.yaml",
+    "**/*.yml",
+    "**/*.sh",
+    "**/*.txt",
+    "**/*.json",
+    "**/*.toml",
+    "**/*.cfg",
+    "_claude_assets/**/*",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+timeout = 300
+addopts = "-m 'not slow'"
+markers = [
+    "smoke: fast packaging/CLI sanity checks",
+    "slow: long-running tests (excluded by default; run with -m '')",
+    "integration: end-to-end multi-component workflows",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+# The course content tree (lesson/exercise notebooks, writing prompts) is
+# teaching material with deliberate `# TODO` gaps and illustrative imports —
+# it is not project source and must not be reformatted or linted. Mirror the
+# base repo, which excludes `python/discopt/course/` for the same reason. We
+# still lint the one real module, src/discopt/course/cli.py, and tests/.
+extend-exclude = [
+    "src/discopt/course/basic/",
+    "src/discopt/course/intermediate/",
+    "src/discopt/course/advanced/",
+    "src/discopt/course/_claude_assets/",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
