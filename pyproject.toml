@@ -39,6 +39,9 @@ dev = [
 # ``discopt`` namespace at import time (discopt's __init__ extends its __path__
 # via pkgutil.extend_path). We deliberately package only ``discopt.course`` —
 # never ``discopt`` — so this distribution never shadows the base package.
+[tool.setuptools]
+include-package-data = true
+
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["discopt.course*"]
@@ -56,23 +59,6 @@ discopt = { git = "https://github.com/jkitchin/discopt", branch = "refactor/430-
 # a wheel: lesson notebooks, syllabus/rubrics/writing markdown, the progress
 # template, the install_skills helper, and the _claude_assets/ slash-command +
 # skill tree. Globs cover every non-.py extension present in the tree.
-[tool.setuptools.package-data]
-"discopt.course" = [
-    "SYLLABUS.md",
-    "README.md",
-    "progress.template.yaml",
-    "install_skills.sh",
-    "**/*.ipynb",
-    "**/*.md",
-    "**/*.yaml",
-    "**/*.yml",
-    "**/*.sh",
-    "**/*.txt",
-    "**/*.json",
-    "**/*.toml",
-    "**/*.cfg",
-    "_claude_assets/**/*",
-]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

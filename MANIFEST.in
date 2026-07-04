@@ -1,0 +1,8 @@
+# Ship the entire packaged course tree (notebooks, rubrics, slash-command
+# assets, dotfiles like .gitignore that `discopt tutor install` materializes)
+# regardless of file type — the curriculum adds asset types on its own cadence,
+# so an extension allowlist would silently drop new content.
+graft src/discopt/course
+global-exclude __pycache__/*
+global-exclude *.py[cod]
+global-exclude .DS_Store
