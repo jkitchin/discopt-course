@@ -1,5 +1,7 @@
 # discopt-course
 
+[![ci](https://github.com/jkitchin/discopt-course/actions/workflows/ci.yml/badge.svg)](https://github.com/jkitchin/discopt-course/actions/workflows/ci.yml)
+
 Optimization course + `tutor` CLI plugin for the
 [discopt](https://github.com/jkitchin/discopt) modeling language. Installs as
 the `discopt.course` namespace package and adds the `tutor` subcommand to the
