@@ -7,7 +7,7 @@ name = "discopt-course"
 version = "0.1.0"
 description = "Optimization course + tutor CLI plugin for the discopt modeling language"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 license = { text = "EPL-2.0" }
 authors = [{ name = "John Kitchin", email = "jkitchin@andrew.cmu.edu" }]
 dependencies = [
@@ -73,7 +73,7 @@ markers = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py312"
 # The course content tree (lesson/exercise notebooks, writing prompts) is
 # teaching material with deliberate `# TODO` gaps and illustrative imports —
 # it is not project source and must not be reformatted or linted. Mirror the
