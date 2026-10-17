@@ -1,10 +1,10 @@
 # Rubric — Lesson 19
 
 ## Exercises (70)
-- E1 (15) SAA convergence plot; converges to $x^\star = 125$ (critical fractile $3/4$).
-- E2 (15) Chance-constrained portfolio via SOCP.
-- E3 (15) CVaR LP works; comparison done.
-- E4 (15) 3-stage tree; EV solved.
+- E1 (15) SAA convergence plot; converges to $x^\star = 125$ (critical fractile $3/4$); hand-built and `build_extensive_form` agree.
+- E2 (15) Chance-constrained portfolio via SOCP ($r^\top w$, not $\mu^\top w$, inside the probability); SAA check with `chance_constraint`.
+- E3 (15) CVaR$_{0.95}$ LP works and matches `CVaR(alpha=0.95)`; comparison with mean-variance done.
+- E4 (15) 3-period tree (125 leaves) with non-anticipativity solved; EVPI computed.
 - E5 (10) VSS, EVPI defined and computed correctly.
 
 ## Writing (30)
