@@ -683,4 +683,4 @@ class TestPackagedInstall:
         assert not (course / "cli.py").exists()
         # The walk-up search now finds the writable copy, not the package.
         assert tutor._find_course_dir() == course.resolve()
-        assert len(tutor._list_lessons(course)) == 30
+        assert len(tutor._list_lessons(course)) == 32  # 30 core + 2 electives

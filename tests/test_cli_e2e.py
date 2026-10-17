@@ -87,7 +87,7 @@ def test_full_student_workflow(workspace):
     assert "current lesson:  basic/01_intro_to_optimization" in r.stdout
     r = tutor("list")
     assert r.returncode == 0
-    assert len([ln for ln in r.stdout.splitlines() if "/" in ln]) == 30
+    assert len([ln for ln in r.stdout.splitlines() if "/" in ln]) == 32  # 30 core + 2 electives
 
     # start / resume / next launch claude with the right slash command.
     assert tutor("start", "2").returncode == 0

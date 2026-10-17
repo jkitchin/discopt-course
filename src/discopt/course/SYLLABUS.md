@@ -1,6 +1,6 @@
 # Syllabus
 
-Thirty lessons in three tracks. Each row gives the lesson's title (as in its
+Thirty core lessons in three tracks, plus two optional electives. Each row gives the lesson's title (as in its
 `reading.ipynb`), its directory under `course/`, and the primary literature
 backing it. Full BibTeX entries are in `course/references.bib` (in a
 discopt-course checkout: `src/discopt/course/references.bib`).
@@ -51,6 +51,16 @@ Any lesson can be started by number, e.g. `discopt tutor start 7`.
 | 28 | Bilevel and Complementarity Programs | [`advanced/28_bilevel_and_complementarity`](advanced/28_bilevel_and_complementarity/) | Dempe2002, LuoPangRalph1996 |
 | 29 | Reformulations and Symmetry | [`advanced/29_reformulations_and_symmetry`](advanced/29_reformulations_and_symmetry/) | Liberti2009, Margot2010 |
 | 30 | Capstone (Advanced) | [`advanced/30_capstone_advanced`](advanced/30_capstone_advanced/) | mixed (your choice, ≥ 12) |
+## Electives — optional
+
+Electives never block the core tracks. Lesson 31 assumes the intermediate
+track (NLP, KKT, interior point); lesson 32 assumes the basic track.
+
+| #  | Title | Directory | Primary references |
+| -- | ----- | --------- | ------------------ |
+| 31 | Dynamic Optimization and Optimal Control | [`electives/31_dynamic_optimization`](electives/31_dynamic_optimization/) | Biegler2010, Betts2010, Cuthrell1987 |
+| 32 | Multi-Objective Optimization | [`electives/32_multi_objective`](electives/32_multi_objective/) | ehrgott-2005, miettinen-1999, mavrotas-2009 |
+
 ## Pacing
 
 The course is self-paced. A reasonable target is **one lesson per week** for
@@ -63,6 +73,8 @@ sequence in optimization.
 - **Basic**: calculus, linear algebra, comfort with Python.
 - **Intermediate**: completion of basic track or equivalent (an undergraduate
   OR or convex optimization course).
+- **Electives**: lesson 31 after the intermediate track; lesson 32 after
+  the basic track.
 - **Advanced**: completion of intermediate track and at least one of: a
   graduate optimization course, research experience, or significant industrial
   experience formulating MINLPs.

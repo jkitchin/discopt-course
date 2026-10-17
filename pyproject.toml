@@ -77,6 +77,7 @@ extend-exclude = [
     "src/discopt/course/basic/",
     "src/discopt/course/intermediate/",
     "src/discopt/course/advanced/",
+    "src/discopt/course/electives/",
     "src/discopt/course/_claude_assets/",
 ]
 
