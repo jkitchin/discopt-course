@@ -1,7 +1,7 @@
 # Rubric — Lesson 14
 
 ## Exercises (70)
-- E1 (20) Toy B&B with strong branching works on the multi-dimensional knapsack (optimum matches `m.solve()`); node savings vs most-fractional reported.
+- E1 (20) Toy B&B with strong branching works on the multi-dimensional knapsack (optimum matches `m.solve()`); node savings vs most-fractional reported; compared with `discopt`'s native tree (`branching_rule="most_fractional"` and `"strong"`: node counts and strong-probe LPs), with a sentence on capped vs full strong branching.
 - E2 (15) Pseudocost branching correct (product score, per-unit updates); node count compared to most-fractional.
 - E3 (15) Reliability with three K values; sensible curve.
 - E4 (10) Most-fractional advantage shown; explanation references overhead.
