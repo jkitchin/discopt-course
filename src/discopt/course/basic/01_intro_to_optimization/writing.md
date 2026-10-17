@@ -26,7 +26,7 @@ In a brief essay, address all three of the following:
 ## Style
 
 - Use math notation (`$...$` or `$$...$$`) for any equations.
-- Use `{cite:p}` MyST citations with keys from `docs/references.bib`.
+- Use `{cite:p}` MyST citations with keys from `course/references.bib`.
   Don't invent citations; run `/course:cite-check` if unsure.
 - Personal voice is fine.
 

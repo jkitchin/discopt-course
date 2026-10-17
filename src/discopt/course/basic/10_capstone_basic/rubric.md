@@ -8,7 +8,7 @@
 - (15) Formulation correct: variables, objective, constraints all justified
   and consistent with the math.
 - (10) `discopt` model implements the formulation correctly; all cells run.
-- (10) Solver invoked correctly with appropriate options (mode, tolerances).
+- (10) Solver invoked correctly with appropriate options (e.g. `time_limit`, `gap_tolerance`); result fields read correctly (`status`, `gap_certified`, `algorithm_route`, duals where relevant).
 - (10) Sensitivity analysis: at least one parameter swept, results plotted,
   interpreted.
 - (5) Code is reasonably clean (no copy-paste smell, named variables, comments

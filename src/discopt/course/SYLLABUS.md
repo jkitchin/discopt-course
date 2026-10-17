@@ -19,7 +19,7 @@ Any lesson can be started by number, e.g. `discopt tutor start 7`.
 | 06 | Branch and Bound, Conceptually | [`basic/06_branch_and_bound`](basic/06_branch_and_bound/) | Land1960, Dakin1965, Wolsey1998 |
 | 07 | Convexity | [`basic/07_convexity`](basic/07_convexity/) | Boyd2004, Rockafellar1970 |
 | 08 | Unconstrained NLP | [`basic/08_unconstrained_nlp`](basic/08_unconstrained_nlp/) | Nocedal2006 |
-| 09 | Constrained NLP, KKT, IPOPT | [`basic/09_constrained_nlp`](basic/09_constrained_nlp/) | Nocedal2006, Wachter2006 |
+| 09 | Constrained NLP, KKT, Interior-Point Methods | [`basic/09_constrained_nlp`](basic/09_constrained_nlp/) | Nocedal2006, Wachter2006 |
 | 10 | Capstone (Basic) | [`basic/10_capstone_basic`](basic/10_capstone_basic/) | Williams2013 |
 
 ## Intermediate track — algorithms and structure
