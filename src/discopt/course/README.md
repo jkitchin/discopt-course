@@ -1,8 +1,9 @@
 # discopt: An Optimization Course
 
 A self-paced, Claude-Code-assisted course in mathematical optimization, taught
-through the `discopt` solver. Three tracks (basic, intermediate, advanced)
-totalling **30 lessons**, each pairing a reading notebook with an exercise
+through the `discopt` solver. Three core tracks (basic, intermediate, advanced)
+totalling **30 lessons**, plus two optional electives (dynamic optimization,
+multi-objective), each pairing a reading notebook with an exercise
 notebook, a writing prompt, and a rubric. Claude Code acts as your TA: it
 delivers material, answers questions, hints when you're stuck, and grades your
 work against the rubric.
@@ -85,6 +86,9 @@ exercise answers — that defeats the point of the course.
   NN-embedded MINLP, robust optimization, ML-for-OR, differentiable
   optimization, bilevel, reformulations. Capstone is a paper-style writeup
   with computational results.
+- **Electives (31–32, optional)**: dynamic optimization and optimal control
+  with `discopt.dae` (after intermediate); multi-objective optimization with
+  `discopt.mo` (after basic). They never block the core tracks.
 
 ## Progress tracking
 

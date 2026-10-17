@@ -18,7 +18,8 @@ pytestmark = pytest.mark.smoke
 
 ROOT = package_root()
 REPO = Path(__file__).resolve().parents[1]
-TRACKS = ("basic", "intermediate", "advanced")
+TRACKS = ("basic", "intermediate", "advanced", "electives")
+N_LESSONS = 32  # 30 core lessons + electives 31-32
 LESSON_FILES = ("reading.ipynb", "exercises.ipynb", "writing.md", "rubric.md")
 
 _CITE = re.compile(r"\{cite:[pt]\}`([^`]*)`")
@@ -49,9 +50,9 @@ def _bib_keys() -> set[str]:
     return set(_BIB_KEY.findall((ROOT / "references.bib").read_text()))
 
 
-def test_thirty_complete_lessons():
+def test_all_lessons_complete_and_numbered():
     dirs = _lesson_dirs()
-    assert len(dirs) == 30
+    assert len(dirs) == N_LESSONS
     for i, d in enumerate(dirs, start=1):
         assert d.name.startswith(f"{i:02d}_"), d
         for f in LESSON_FILES:
@@ -64,7 +65,7 @@ def test_syllabus_matches_lesson_directories_and_titles():
         int(m.group(1)): (m.group(2).strip(), m.group(3))
         for m in re.finditer(r"^\| (\d\d) \| (.+?) \| \[`([\w/]+)`\]", syllabus, re.M)
     }
-    assert len(rows) == 30
+    assert len(rows) == N_LESSONS
     for d in _lesson_dirs():
         num, title = _notebook_title(d / "reading.ipynb")
         assert d.name.startswith(f"{num:02d}_"), f"{d}: heading says lesson {num}"

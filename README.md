@@ -9,8 +9,9 @@ base discopt CLI — `discopt tutor ...` works unchanged from when the course
 lived in the base package.
 
 A self-paced, Claude-Code-assisted course in mathematical optimization, taught
-through the `discopt` solver. Three tracks (basic, intermediate, advanced)
-totalling **30 lessons**, each pairing a reading notebook with an exercise
+through the `discopt` solver. Three core tracks (basic, intermediate, advanced)
+totalling **30 lessons**, plus two optional electives (dynamic optimization,
+multi-objective), each pairing a reading notebook with an exercise
 notebook, a writing prompt, and a rubric. Claude Code acts as your TA: it
 delivers material, answers questions, hints when you're stuck, and grades your
 work against the rubric.

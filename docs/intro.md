@@ -8,7 +8,8 @@ course lived in the base package (discopt 0.5 and earlier).
 
 The course is a self-paced, Claude-Code-assisted curriculum in mathematical
 optimization, taught through the `discopt` solver. Three tracks — basic,
-intermediate, and advanced — total 30 lessons, each pairing a reading notebook
+intermediate, and advanced — total 30 core lessons, plus two optional
+electives (dynamic optimization, multi-objective), each pairing a reading notebook
 with an exercise notebook, a writing prompt, and a grading rubric. The
 foundations lean on the standard references {cite:p}`Boyd2004,Nocedal2006`.
 Claude Code acts as the teaching assistant: it delivers material, answers

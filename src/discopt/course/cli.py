@@ -41,7 +41,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-_TRACKS = ("basic", "intermediate", "advanced")
+_TRACKS = ("basic", "intermediate", "advanced", "electives")
 
 
 def _packaged_course_dir() -> Path | None:
