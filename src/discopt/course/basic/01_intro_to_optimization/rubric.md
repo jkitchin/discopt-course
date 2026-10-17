@@ -12,7 +12,7 @@
 ### Exercise 2 — Diet with eggs (15 pts)
 - (6) Four continuous food variables with $0 \le x_i \le 8$ (per-food cap).
 - (5) Cost vector and nutrient matrix correctly extended to 4 foods.
-- (2) Solver returns `OPTIMAL`; prints purchased quantities and cost.
+- (2) Solver returns `"optimal"`; prints purchased quantities and cost.
 - (2) Numerical answer matches reference within 1e-3.
 
 ### Exercise 3 — LP relaxation gap (15 pts)
@@ -22,15 +22,16 @@
 - (4) Discussion connects gap to B&B difficulty.
 
 ### Exercise 4 — Six minima (15 pts)
-- (5) Grid of ≥ 25 starts.
+- (5) Grid of ≥ 25 starts, each a *local* solve (`skip_convex_check=True` + `initial_solution`), not the default global solve.
 - (5) Six distinct local minima recovered after deduplication.
 - (5) Two global minima identified at $f^\star \approx -1.0316$.
 
 ### Exercise 5 — Read the solver result (15 pts)
-- (4) Reports status, objective, iteration/node count, wall time for the diet LP.
-- (5) Constructs an *infeasible* variant (e.g., $b_3 = 10^{12}$); solver returns `INFEASIBLE`.
-- (5) Constructs a *practically-unbounded* variant (drop cost, minimize $-\sum x$ with loose `ub`); reports that the optimum pegs to the bound.
-- (1) Briefly notes that "optimum at a default bound" usually means a missing bound.
+- (3) Reports status, objective, node count (0 for an LP: no B&B tree), route, and wall time for the diet LP.
+- (4) Constructs an *infeasible* variant (e.g., $b_3 = 10^{12}$); solver returns `"infeasible"`.
+- (4) Constructs a *practically-unbounded* variant (drop cost, minimize $-\sum x$ with loose `ub`); reports that the optimum pegs to the bound.
+- (3) With `ub=np.inf` declared, solver returns `"unbounded"`.
+- (1) Briefly notes that "optimum at a huge bound" usually means a missing bound (and that an omitted `ub` becomes a finite default box).
 
 ## Writing (30)
 
