@@ -11,9 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.3.0
-      # Resolves the released discopt>=0.9 from PyPI (no [tool.uv.sources]
-      # pin) plus the dev group. Testing against discopt `main` is the job of
-      # discopt-integration.yml.
+      # Resolves discopt from its git `main` via [tool.uv.sources] (the course
+      # currently tracks main; this compiles discopt's Rust core, which the
+      # runner's preinstalled Rust toolchain handles) plus the dev group.
       - run: uv sync --python 3.12
       - run: uv run ruff check .
       - run: uv run ruff format --check .

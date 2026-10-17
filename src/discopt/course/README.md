@@ -8,8 +8,9 @@ notebook, a writing prompt, and a rubric. Claude Code acts as your TA: it
 delivers material, answers questions, hints when you're stuck, and grades your
 work against the rubric.
 
-The course is written for **discopt 0.9 or newer** (check with
-`discopt about`) on Python 3.12+.
+The course tracks **discopt `main`** (0.9.1.dev0 or newer; check with
+`discopt about`) on Python 3.12+. Until the next discopt release, install
+discopt from git (see step 1 below).
 
 ## How the course works
 
@@ -30,7 +31,9 @@ answer.
 ## Quick start
 
 ```bash
-# 1. Install discopt-course (pulls in discopt>=0.9) and Jupyter
+# 1. Install discopt from git main (needs a Rust toolchain until the next
+#    discopt release), then discopt-course and Jupyter
+pip install "discopt @ git+https://github.com/jkitchin/discopt.git@main"
 pip install "git+https://github.com/jkitchin/discopt-course.git" jupyterlab
 
 # 2. In a working directory of your choice: materialize a writable course/,

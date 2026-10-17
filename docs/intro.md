@@ -18,15 +18,16 @@ via the `/course:` slash commands bundled with the package.
 
 ## Install
 
-discopt-course is installed from GitHub (it is not on PyPI); this pulls in
-[discopt](https://pypi.org/project/discopt/) 0.9 or newer from PyPI:
+discopt-course is installed from GitHub (it is not on PyPI). The lessons
+currently track discopt's `main` branch, which is newer than the 0.9.0 release
+on PyPI, so install discopt from git first (this needs a Rust toolchain):
 
 ```bash
+pip install "discopt @ git+https://github.com/jkitchin/discopt.git@main"
 pip install "git+https://github.com/jkitchin/discopt-course.git"
 ```
 
-Requires Python 3.12+ and `discopt>=0.9` — the lessons are written against
-the discopt 0.9 API. Installing this package registers the `tutor` subcommand
+Requires Python 3.12+ and discopt 0.9.1.dev0 or newer. Installing this package registers the `tutor` subcommand
 with the base discopt CLI automatically. The interactive verbs also need
 [Claude Code](https://claude.com/claude-code) (`claude` on your PATH).
 
