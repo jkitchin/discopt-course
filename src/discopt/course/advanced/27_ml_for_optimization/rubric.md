@@ -1,8 +1,8 @@
 # Rubric — Lesson 27
 
 ## Exercises (70)
-- E1 (20) imitation dataset + classifier + accuracy.
-- E2 (15) plugged in; nodes compared.
+- E1 (20) own B&B with strong branching; imitation dataset + classifier + accuracy.
+- E2 (15) learned rule plugged into own B&B; nodes/time vs strong and most-fractional; discopt reference reported.
 - E3 (20) DF vs MSE training; regret comparison.
 - E4 (10) GNN features computed; one shown predictive.
 - E5 (5) thoughtful critique.
@@ -16,7 +16,7 @@
 - **Technical correctness (10):** every claim about complexity, an algorithm,
   or a solver's behaviour is either a citation or a derivation; nothing
   factually wrong per the assessor's checklist for this lesson.
-- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `docs/references.bib`,
+- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `course/references.bib`,
   at least one of which is a recommended reference for this lesson; no
   invented or unverifiable keys.
 - **Engagement (5):** the response cites a specific surprise, equation,

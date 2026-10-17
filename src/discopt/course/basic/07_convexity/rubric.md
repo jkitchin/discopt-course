@@ -4,8 +4,8 @@
 
 ## Exercises (70)
 - E1 (15): each function correctly classified with proof.
-- E2 (15): convex model built; `r.convex_fast_path == True` after solve; optimum reported.
-- E3 (15): one term changed to create nonconvexity; `r.convex_fast_path == False`; multiple local optima found.
+- E2 (15): convex model built in a form the classifier can prove (e.g. $-\log x$, `dm.softplus`); `r.convex_fast_path == True` after solve; optimum reported.
+- E3 (15): one term changed to create nonconvexity; `r.convex_fast_path == False` on the default (global) solve; multiple local optima found with local solves (`skip_convex_check=True` + `initial_solution`), and the global solve's answer identified among them.
 - E4 (15): valid DC decomposition; both convex pieces verified.
 - E5 (10): max of concave reformulated as min of convex (negation).
 
@@ -18,7 +18,7 @@
 - **Technical correctness (10):** every claim about complexity, an algorithm,
   or a solver's behaviour is either a citation or a derivation; nothing
   factually wrong per the assessor's checklist for this lesson.
-- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `docs/references.bib`,
+- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `course/references.bib`,
   at least one of which is a recommended reference for this lesson; no
   invented or unverifiable keys.
 - **Engagement (5):** the response cites a specific surprise, equation,

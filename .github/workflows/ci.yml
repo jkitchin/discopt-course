@@ -11,8 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.3.0
-      # Installs discopt from the pinned extraction branch (see
-      # [tool.uv.sources]); requires discopt>=0.6 with the discopt.cli hook.
+      # Resolves the released discopt>=0.9 from PyPI (no [tool.uv.sources]
+      # pin) plus the dev group. Testing against discopt `main` is the job of
+      # discopt-integration.yml.
       - run: uv sync --python 3.12
       - run: uv run ruff check .
       - run: uv run ruff format --check .

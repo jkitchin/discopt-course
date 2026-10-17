@@ -1,11 +1,11 @@
 # Rubric — Lesson 29
 
 ## Exercises (70)
-- E1 (15) bin-packing nodes reduced via lex.
+- E1 (15) bin-packing nodes reduced via lex on discopt's own tree; HiGHS-route difference explained.
 - E2 (20) coloring with three strategies; node counts reported.
 - E3 (15) perspective + SOC reformulation works.
 - E4 (10) symmetry-detection code finds a known symmetry.
-- E5 (10) Claude-suggested reformulation applied; speedup measured.
+- E5 (10) suggested reformulation (analyze_reformulations, `/reformulate`, or own analysis) applied and verified; speedup measured.
 
 ## Writing (30)
 
@@ -16,7 +16,7 @@
 - **Technical correctness (10):** every claim about complexity, an algorithm,
   or a solver's behaviour is either a citation or a derivation; nothing
   factually wrong per the assessor's checklist for this lesson.
-- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `docs/references.bib`,
+- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `course/references.bib`,
   at least one of which is a recommended reference for this lesson; no
   invented or unverifiable keys.
 - **Engagement (5):** the response cites a specific surprise, equation,

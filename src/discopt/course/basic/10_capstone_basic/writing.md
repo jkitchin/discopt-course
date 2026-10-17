@@ -18,7 +18,7 @@ Structure:
 
 ## Citations
 
-Cite at least four references from `docs/references.bib`. At least one
+Cite at least four references from `course/references.bib`. At least one
 should be the core textbook for your problem class
 ({cite:p}`Williams2013,Wolsey1998,Boyd2004,Markowitz1952,Smith1999`). At
 least one should be a paper specific to your problem domain.

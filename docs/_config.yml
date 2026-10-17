@@ -18,6 +18,7 @@ sphinx:
   extra_extensions:
     - sphinxcontrib.bibtex
   config:
-    bibtex_bibfiles: ["references.bib"]
+    # Single source of truth: the bibliography that ships with the course.
+    bibtex_bibfiles: ["../src/discopt/course/references.bib"]
     bibtex_reference_style: author_year
     suppress_warnings: ["etoc.toctree", "myst.header"]

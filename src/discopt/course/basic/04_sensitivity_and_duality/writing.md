@@ -6,4 +6,4 @@ Write ~600 words for a fellow graduate student explaining duality through a
 informative ("not at all binding"); (c) one situation in which the LP is
 degenerate and what that means about the underlying problem. Cite
 {cite:p}`Bertsimas1997` and one applied paper of your choice from
-`docs/references.bib`.
+`course/references.bib`.

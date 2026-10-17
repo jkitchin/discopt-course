@@ -4,7 +4,7 @@
 - E1 (10) Four inequalities; tightness analysis.
 - E2 (15) 3D plots show envelope and refined envelope.
 - E3 (15) αBB computation; plot.
-- E4 (20) Pooling solved three ways; numbers reported.
+- E4 (20) Pooling solved locally from several starts (local optima found, e.g. 100 vs 400), globally with the default, and with `rlt=True` / `partitions`; objectives, bounds, nodes, times reported.
 - E5 (10) Quadratic gap scaling.
 
 ## Writing (30)
@@ -16,7 +16,7 @@
 - **Technical correctness (10):** every claim about complexity, an algorithm,
   or a solver's behaviour is either a citation or a derivation; nothing
   factually wrong per the assessor's checklist for this lesson.
-- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `docs/references.bib`,
+- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `course/references.bib`,
   at least one of which is a recommended reference for this lesson; no
   invented or unverifiable keys.
 - **Engagement (5):** the response cites a specific surprise, equation,

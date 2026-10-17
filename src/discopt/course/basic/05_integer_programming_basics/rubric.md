@@ -3,10 +3,10 @@
 **Total: 100**
 
 ## Exercises (70)
-- E1 (15): tight $M$ derived; linearization correct; tested.
-- E2 (15): both formulations correct; LP gap and node count compared (disagg ≪ agg).
+- E1 (15): tight $M = b - \sum_j \min(0, a_j U_j) = 8$ derived; linearization correct; tested for $z=0,1$; matches `m.if_then`.
+- E2 (15): both formulations correct; LP-relaxation gap compared (disaggregated gap ≈ 0, aggregated large); node counts compared, ideally on a larger instance where they diverge (disagg ≪ agg).
 - E3 (15): LP solved; integer solution; matches MILP.
-- E4 (15): SOS2 set correct; piecewise approximation $0.5\cdot 1 + 0.5\cdot 4 = 2.5$ at $x=1.5$ (linear interpolation between consecutive break points).
+- E4 (15): SOS2 set correct (`m.sos2`), binary-formulation cross-check agrees; piecewise approximation $0.5\cdot 1 + 0.5\cdot 4 = 2.5$ at $x=1.5$ (linear interpolation between consecutive break points).
 - E5 (10): identifies loose $M$ and missing convex-hull tightening.
 
 ## Writing (30)
@@ -18,7 +18,7 @@
 - **Technical correctness (10):** every claim about complexity, an algorithm,
   or a solver's behaviour is either a citation or a derivation; nothing
   factually wrong per the assessor's checklist for this lesson.
-- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `docs/references.bib`,
+- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `course/references.bib`,
   at least one of which is a recommended reference for this lesson; no
   invented or unverifiable keys.
 - **Engagement (5):** the response cites a specific surprise, equation,

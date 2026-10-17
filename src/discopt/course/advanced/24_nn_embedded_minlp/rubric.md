@@ -4,7 +4,7 @@
 - E1 (15) NN trained, embedded, optimum found; surrogate error reported.
 - E2 (20) Hand-coded ReLU big-M matches.
 - E3 (15) IBP vs OBBT speedup measured.
-- E4 (10) tanh global solve runs.
+- E4 (10) tanh network solved full-space and reduced-space; runtime/nodes/`gap_certified` compared with ReLU.
 - E5 (10) surrogate loop iteration; improvement vs random.
 
 ## Writing (30)
@@ -16,7 +16,7 @@
 - **Technical correctness (10):** every claim about complexity, an algorithm,
   or a solver's behaviour is either a citation or a derivation; nothing
   factually wrong per the assessor's checklist for this lesson.
-- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `docs/references.bib`,
+- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `course/references.bib`,
   at least one of which is a recommended reference for this lesson; no
   invented or unverifiable keys.
 - **Engagement (5):** the response cites a specific surprise, equation,

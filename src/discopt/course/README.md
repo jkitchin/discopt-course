@@ -1,11 +1,15 @@
 # discopt: An Optimization Course
 
 A self-paced, Claude-Code-assisted course in mathematical optimization, taught
-through the `discopt` solver. Three tracks (basic, intermediate, advanced)
-totalling **30 lessons**, each pairing a reading notebook with an exercise
+through the `discopt` solver. Three core tracks (basic, intermediate, advanced)
+totalling **30 lessons**, plus two optional electives (dynamic optimization,
+multi-objective), each pairing a reading notebook with an exercise
 notebook, a writing prompt, and a rubric. Claude Code acts as your TA: it
 delivers material, answers questions, hints when you're stuck, and grades your
 work against the rubric.
+
+The course is written for **discopt 0.9 or newer** (check with
+`discopt about`) on Python 3.12+.
 
 ## How the course works
 
@@ -18,36 +22,36 @@ Each lesson lives in `course/<track>/<id>/` and contains:
 | `writing.md`     | A short essay or analysis prompt (≈ 1 page).                  |
 | `rubric.md`      | The criteria Claude uses to assess your work.                 |
 
-Reference solutions live under `course/solutions/<track>/<id>/`. Try the
-exercise yourself before peeking — Claude can give hints without revealing
-the answer.
+You write your essay in `writing_response.md` next to the prompt. Reference
+solutions are not distributed with the course: try each exercise yourself, and
+ask Claude for graduated hints (`/course:hint`) — it will not hand you the
+answer.
 
 ## Quick start
 
 ```bash
-# 1. Install discopt with the optional notebook deps
-pip install -e ".[dev,nn,llm]"
-jupyter lab
+# 1. Install discopt-course (pulls in discopt>=0.9) and Jupyter
+pip install "git+https://github.com/jkitchin/discopt-course.git" jupyterlab
 
-# 2. Install the course slash commands and assessor skill into .claude/
-bash course/install_skills.sh             # project-scope (./.claude/)
-# or
-bash course/install_skills.sh --user      # global (~/.claude/)
+# 2. In a working directory of your choice: materialize a writable course/,
+#    install the /course: slash commands + assessor skill into ./.claude/,
+#    and seed course/progress.yaml
+discopt tutor install
 
-# 3. Open the syllabus
-open course/SYLLABUS.md
+# 3. See the dashboard, then launch lesson 1 in Claude Code
+discopt tutor
+discopt tutor start 1
 
-# 4. In Claude Code, start lesson 1
-/course:lesson basic/01_intro_to_optimization
-
-# 5. When you finish the exercises, ask Claude to assess
+# 4. When you finish the exercises, ask Claude (inside that session) to assess
 /course:assess basic/01_intro_to_optimization
 ```
 
-The slash commands and assessor skill ship as source files under
-`course/_claude_assets/`. The install script copies them into `.claude/`
-where Claude Code will pick them up. Source-of-truth lives under
-`_claude_assets/` so they're version-controlled with the rest of the course.
+Other verbs: `discopt tutor list`, `discopt tutor resume`, `discopt tutor next`,
+and `discopt tutor reset [<lesson>]`. See `SYLLABUS.md` for the full lesson
+list.
+
+To install the slash commands for every project instead (`~/.claude/`), run
+`bash course/install_skills.sh --user`.
 
 ## Slash commands
 
@@ -56,12 +60,18 @@ The course ships with these Claude Code commands:
 - `/course:lesson <id>` — load a lesson, get a guided tour of the reading.
 - `/course:hint <id> <ex#>` — get a graduated hint for a specific exercise.
 - `/course:assess <id>` — Claude grades your exercises against the rubric.
-- `/course:grade-writing <id>` — Claude grades your `writing.md` response.
+- `/course:grade-writing <id>` — Claude grades your `writing_response.md`.
 - `/course:progress` — show what you've completed and what's next.
 - `/course:cite-check` — verify all `{cite:p}` keys resolve in `references.bib`.
 
 The grading behaviour is implemented by the `course-assessor` skill in
 `.claude/skills/course-assessor/`, so it is consistent across sessions.
+
+discopt also ships its own general-purpose Claude Code commands and expert
+agents (install them with `discopt install-skills`). `/debug` is useful when a
+lesson cell fails because of your installation rather than your model, and
+`/diagnose` explains a `SolveResult`. Don't use `/formulate` to write your
+exercise answers — that defeats the point of the course.
 
 ## Tracks
 
@@ -76,38 +86,29 @@ The grading behaviour is implemented by the `course-assessor` skill in
   NN-embedded MINLP, robust optimization, ML-for-OR, differentiable
   optimization, bilevel, reformulations. Capstone is a paper-style writeup
   with computational results.
+- **Electives (31–32, optional)**: dynamic optimization and optimal control
+  with `discopt.dae` (after intermediate); multi-objective optimization with
+  `discopt.mo` (after basic). They never block the core tracks.
 
 ## Progress tracking
 
-Your state is recorded in `course/progress.yaml` (created on first
-`/course:progress` call from `progress.template.yaml`). Lessons unlock in
+Your state is recorded in `course/progress.yaml`, seeded from
+`progress.template.yaml` by `discopt tutor install` (or by the first
+`/course:progress` call). A lesson is passed at ≥ 70 / 100. Lessons unlock in
 order within a track, but tracks can be done in parallel.
 
 ## Citations
 
-Every reading cites the literature with `{cite:p}` / `{cite:t}` keys
-resolving to entries in `docs/references.bib`. New course-specific entries
-were added when this course was built. Run `/course:cite-check` to verify.
+Every reading cites the literature with `{cite:p}` / `{cite:t}` keys that
+resolve to entries in `course/references.bib` (lesson files that mention
+`docs/references.bib` mean this file). Cite from it in your own essays, and
+run `/course:cite-check` to verify.
 
-## Building / regenerating notebooks
+## Working with the notebooks
 
-The notebooks are generated from Python content modules in
-`course/_build/lessons/`:
-
-```bash
-python course/_build/nbgen.py
-```
-
-This rewrites every `reading.ipynb` and `exercises.ipynb`. Edit the `.py`
-modules — not the JSON — and rebuild.
-
-## Course-API shim
-
-The lesson code cells use a slightly-friendlier façade
-(`m.add_variable / .add_variables / .add_constraint / .is_convex / .solve`
-with kwargs like `mode`, `verbose`, `x0`) that maps onto the real `discopt`
-API (`m.continuous / .binary / .integer / .subject_to / .solve`). The shim
-lives in `course/_compat.py`; `nbgen.py` auto-injects a loader cell at the
-top of every notebook so the shim is installed before the lesson code runs.
-You can remove the shim when comfortable working directly with the real
-`discopt.modeling.core.Model` API.
+The notebooks use the real `discopt` modeling API directly
+(`discopt.Model`, `m.continuous / .integer / .binary`, `m.subject_to`,
+`m.minimize`, `m.solve()`). If you modify a reading notebook and want the
+pristine version back, delete it and re-run `discopt tutor install` (it only
+copies files that are missing unless you pass `--force`, which overwrites
+every packaged file, including your exercise notebooks).

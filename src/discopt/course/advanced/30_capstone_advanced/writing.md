@@ -11,5 +11,5 @@ two-column or single, IEEE/SIAM-ish). Sections:
 6. **Limitations & future work** (~0.5 page).
 7. **References**.
 
-Cite at least 12 references from `docs/references.bib`. Verify with
+Cite at least 12 references from `course/references.bib`. Verify with
 `/course:cite-check` before submission.
