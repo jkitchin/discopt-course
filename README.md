@@ -18,17 +18,21 @@ work against the rubric.
 
 ## Install
 
-discopt-course is not on PyPI; install it from GitHub (this pulls in
-[discopt](https://pypi.org/project/discopt/) from PyPI):
+discopt-course is not on PyPI; install it from GitHub. The lessons currently
+track discopt's `main` branch (0.9.1.dev0): they use fixes and options that are
+newer than the 0.9.0 release on PyPI, so install discopt from git first
+(this compiles discopt's Rust core and needs a Rust toolchain):
 
 ```bash
+pip install "discopt @ git+https://github.com/jkitchin/discopt.git@main"
 pip install "git+https://github.com/jkitchin/discopt-course.git"
-discopt about        # should report discopt 0.9.0 or newer
+discopt about        # should report discopt 0.9.1.dev0 or newer
 discopt tutor        # the tutor subcommand is now registered
 ```
 
-Requires Python 3.12+ and `discopt>=0.9`: the lessons are written against the
-discopt 0.9 API (the `discopt.cli` plugin hook itself has existed since 0.6).
+Requires Python 3.12+ and `discopt>0.9.0` (the `discopt.cli` plugin hook
+itself has existed since 0.6). Once the next discopt release is on PyPI, the
+first line is no longer needed.
 Installing this package registers the `tutor` subcommand with the base discopt
 CLI automatically. You also need [Claude Code](https://claude.com/claude-code)
 (the `claude` binary on your PATH) for the interactive verbs, and Jupyter if

@@ -33,7 +33,7 @@ When invoked, you will be given a lesson id of the form `<track>/<id>` (e.g.
 2. Read the student's exercise notebook. For each exercise:
    - Determine whether their code runs (mentally or via a small check in a
      scratch copy — never modify the student's notebook). The course targets
-     discopt >= 0.9; if code fails only because of the student's
+     discopt main (0.9.1.dev0 or newer); if code fails only because of the student's
      installation, say so (`discopt about`, `discopt test`) rather than
      deducting points.
    - Determine whether their answer is correct (against the reference

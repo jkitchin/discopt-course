@@ -1,7 +1,7 @@
 # Rubric — Lesson 29
 
 ## Exercises (70)
-- E1 (15) bin-packing nodes reduced via lex on discopt's own tree; HiGHS-route difference explained.
+- E1 (15) bin-packing node counts with and without lex on discopt's own tree (`milp_backend="native"`) and on HiGHS; optimum unchanged; the HiGHS-route difference and any case where lex does not help explained.
 - E2 (20) coloring with three strategies; node counts reported.
 - E3 (15) perspective + SOC reformulation works.
 - E4 (10) symmetry-detection code finds a known symmetry.

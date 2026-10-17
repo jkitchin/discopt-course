@@ -7,7 +7,7 @@
 - E2 (15): LP solved; dual signs mapped correctly from `discopt`'s convention (all inequality multipliers $\ge 0$); primal/dual objectives equal within 1e-9; identifies tight constraints.
 - E3 (15): KM correctly built; objectives are $100^{n-1}$; discussion explains why the exponential worst case is not visible through HiGHS (pivot rules / presolve; pivot counts not exposed).
 - E4 (15): Cost change equals $y_3 \cdot \Delta b_3$ within solver tol.
-- E5 (15): Three LPs with correct statuses (`"optimal"`, `"unbounded"` — requires an explicit infinite bound — and `"infeasible"`); brief explanation references duality / Farkas.
+- E5 (15): Three LPs with correct statuses (`"optimal"`, `"unbounded"` — infinite or omitted bound, not a loose finite one — and `"infeasible"`); brief explanation references duality / Farkas.
 
 ## Writing (30)
 

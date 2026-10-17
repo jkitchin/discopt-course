@@ -3,7 +3,7 @@
 ## Exercises (70)
 - E1 (15) Pivot trace correct, all bases listed.
 - E2 (15) Phase 1 implemented; works on infeasible-start problem.
-- E3 (15) KM timing reported; own iteration counts $\approx 2^n - 1$; discopt (HiGHS route) iteration count from `r.solver_stats["lp/iters"]` reported and explained.
+- E3 (15) KM timing reported; own iteration counts $\approx 2^n - 1$; discopt (HiGHS route) iteration counts from `r.solver_stats["lp/iters"]` reported with default presolve and with `highs_options={"presolve": "off"}`, and explained.
 - E4 (10) Beale (or other) cycling instance built; Bland terminates.
 - E5 (15) LU update implemented; speedup measured.
 

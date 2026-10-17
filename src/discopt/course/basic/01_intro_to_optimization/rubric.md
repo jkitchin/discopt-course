@@ -30,8 +30,8 @@
 - (3) Reports status, objective, node count (0 for an LP: no B&B tree), route, and wall time for the diet LP.
 - (4) Constructs an *infeasible* variant (e.g., $b_3 = 10^{12}$); solver returns `"infeasible"`.
 - (4) Constructs a *practically-unbounded* variant (drop cost, minimize $-\sum x$ with loose `ub`); reports that the optimum pegs to the bound.
-- (3) With `ub=np.inf` declared, solver returns `"unbounded"`.
-- (1) Briefly notes that "optimum at a huge bound" usually means a missing bound (and that an omitted `ub` becomes a finite default box).
+- (3) With `ub=np.inf` declared, solver returns `"unbounded"`; with `ub` omitted, a default-box warning appears and the LP is still reported `"unbounded"`.
+- (1) Briefly notes that "optimum at a huge bound" usually means a too-loose *declared* bound.
 
 ## Writing (30)
 

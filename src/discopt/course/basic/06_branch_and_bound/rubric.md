@@ -3,10 +3,10 @@
 **Total: 100**
 
 ## Exercises (70)
-- E1 (15): `bnb_trace` dict supplied (7 nodes for the reference instance $v = (9,14,13,11)$, root LP 28, optimum 27); every LP value verified against a `discopt` LP-relaxation solve within 1e-6; prune reasons correct.
-- E2 (15): hard instance shown to be vastly harder (with `DISCOPT_LP_MILP_BACKEND=rust` node counts); LP gap explanation; notes that HiGHS hides the difference at this size.
-- E3 (10): three strategies compared; trade-offs articulated.
-- E4 (15): symmetric instance built; lex constraint reduces nodes in `discopt`'s own tree (HiGHS node counts stay ≈1, explained).
+- E1 (15): `bnb_trace` dict supplied (7 nodes for the reference instance $v = (9,14,13,11)$, root LP 28, optimum 27); every LP value verified against a `discopt` LP-relaxation solve within 1e-6; prune reasons correct; compared with the native depth-first, most-fractional tree.
+- E2 (15): hard instance shown to be vastly harder (with `milp_backend="native"` node counts); LP gap explanation; notes that HiGHS hides the difference at this size.
+- E3 (10): three strategies compared in the student's own B&B and on `discopt`'s native tree (`milp_backend="native"`, `strategy=`); differences explained; trade-offs articulated.
+- E4 (15): symmetric instance built; lex constraint's effect on `discopt`'s own tree (`milp_backend="native"`) measured over a few seeds (it usually, not always, reduces nodes); HiGHS node counts compared and explained.
 - E5 (15): TUM (or other) example with integer LP at root.
 
 ## Writing (30)
