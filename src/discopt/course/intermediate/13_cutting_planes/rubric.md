@@ -3,9 +3,9 @@
 ## Exercises (70)
 - E1 (15): Cut verified — (a) $x_1 + x_2 \le 4$ holds at every integer point of $[0,5]^2$ that satisfies the original constraints (in particular at $(3,1)$ where $3+1=4$ ✓); (b) violated by LP optimum (LHS $\approx 4.6 > 4$); (c) re-solved LP with cut returns objective $= 4$.
 - E2 (15) Plot shows separation visually.
-- E3 (15) MIR applied; LP-bound movement and node counts (`nlp_solver="simplex"`) reported.
-- E4 (10) Full vs single-pass root cut loop compared (nodes, time) on ≥ 3 instances; LP gap reported; honest verdict on whether cuts paid off.
-- E5 (15) Cover-cut callback works (invoked via `cut_callback` with the no-op `lazy_constraints` workaround); node counts with and without compared.
+- E3 (15) MIR applied; LP-bound movement and node counts (`milp_backend="native", milp_cuts=False`) reported.
+- E4 (10) `milp_cuts=True` vs `milp_cuts=False` on the native tree compared (nodes, time, cuts added, root bound) on ≥ 3 instances; LP gap and root gap closed reported; honest verdict on whether cuts paid off (they need not on every seed).
+- E5 (15) Cover-cut callback works (invoked via `cut_callback`); node counts compared against a no-cut callback baseline on the same spatial B&B route.
 
 ## Writing (30)
 

@@ -5,7 +5,7 @@
 - E2 (20) FBBT implemented; bounds improve on test problem; cross-checked against `fbbt_box`.
 - E3 (15) Probing fixings + cliques reported; compared with `probe_box`.
 - E4 (10) OBBT bounds tighter than FBBT; trade-off discussed.
-- E5 (10) Presolve on/off measured on a MILP (HiGHS via `scipy.optimize.milp`) and on a spatial-B&B model; route-dependence of `presolve=False` and redundancy with root/in-tree tightening discussed.
+- E5 (10) Presolve on/off measured on a MILP (HiGHS via `highs_options={"presolve": "off"}`, and `discopt`'s native tree via `milp_backend="native", presolve=False`) and on a spatial-B&B model; route-dependence of `presolve=False` and redundancy with root/in-tree tightening discussed.
 
 ## Writing (30)
 

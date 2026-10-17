@@ -3,7 +3,7 @@
 ## Exercises (70)
 - E1 (15): trace correct; bounds tight at termination.
 - E2 (15): OBBT impact measured (default vs `obbt_at_root=False`; nodes, time, root bound).
-- E3 (15): node-selection strategies compared in discopt; variable-selection rules compared in own B&B.
+- E3 (15): node-selection strategies compared in discopt; variable-selection rules compared in own B&B; MILP-vs-spatial branching contrast addressed.
 - E4 (20): toy spatial B&B works on 3 problems.
 - E5 (5): diagnostic plausible.
 

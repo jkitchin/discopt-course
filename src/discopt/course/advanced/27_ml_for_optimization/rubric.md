@@ -2,7 +2,7 @@
 
 ## Exercises (70)
 - E1 (20) own B&B with strong branching; imitation dataset + classifier + accuracy.
-- E2 (15) learned rule plugged into own B&B; nodes/time vs strong and most-fractional; discopt reference reported.
+- E2 (15) learned rule plugged into own B&B; nodes/time vs strong and most-fractional; discopt reference reported (default route and native MILP tree with `branching_rule`).
 - E3 (20) DF vs MSE training; regret comparison.
 - E4 (10) GNN features computed; one shown predictive.
 - E5 (5) thoughtful critique.
