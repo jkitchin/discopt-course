@@ -2,9 +2,9 @@
 
 ## Exercises (70)
 - E1 (15) implicit gradient matches analytical.
-- E2 (15) cvxpylayers + finite-diff verification.
+- E2 (15) QP layer (discopt sensitivity and/or cvxpylayers) + finite-diff verification; active-bound behaviour explained.
 - E3 (20) DF beats MSE on held-out regret.
-- E4 (15) LP differentiation; degeneracy noted.
+- E4 (15) LP differentiation; $dx^\star/dc = 0$ a.e. and $d\,\text{obj}^\star/dc = x^\star$ explained; degeneracy noted.
 - E5 (5) sensible counter-example.
 
 ## Writing (30)

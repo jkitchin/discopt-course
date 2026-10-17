@@ -1,11 +1,11 @@
 # Rubric — Lesson 15
 
 ## Exercises (70)
-- E1 (15) FBBT trace correct; final bounds match.
-- E2 (20) FBBT implemented; bounds improve on test problem.
-- E3 (15) Probing fixings + cliques reported.
+- E1 (15) FBBT trace correct; fixpoint $x_1 \in [0.5, 5]$, $x_2 \in [0, 4.5]$ (matches `fbbt_box`).
+- E2 (20) FBBT implemented; bounds improve on test problem; cross-checked against `fbbt_box`.
+- E3 (15) Probing fixings + cliques reported; compared with `probe_box`.
 - E4 (10) OBBT bounds tighter than FBBT; trade-off discussed.
-- E5 (10) Presolve speedup measured.
+- E5 (10) Presolve on/off measured on a MILP (HiGHS via `scipy.optimize.milp`) and on a spatial-B&B model; route-dependence of `presolve=False` and redundancy with root/in-tree tightening discussed.
 
 ## Writing (30)
 
