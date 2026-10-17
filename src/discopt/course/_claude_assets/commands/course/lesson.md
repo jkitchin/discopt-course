@@ -25,6 +25,14 @@ You are guiding a student through a discopt-course lesson. The lesson id is
 6. If the student finishes the reading, suggest they run
    `/course:hint $ARGUMENTS <ex#>` if they get stuck on any exercise, and
    `/course:assess $ARGUMENTS` when done.
+7. If a code cell fails for reasons unrelated to the lesson (import errors,
+   a missing solver backend, a stale discopt), check the installed version
+   with `discopt about` — the course targets discopt >= 0.9 — and
+   `discopt test` for a smoke check. discopt also ships its own Claude Code
+   commands (installed with `discopt install-skills`): `/debug` for broken
+   setups or solves and `/diagnose` for interpreting a `SolveResult` are
+   fine to point students at. Do not use discopt's `/formulate` or
+   `/reformulate` to produce exercise answers.
 
 **Do NOT update `current_lesson` on a bare preview.** Update
 `course/progress.yaml`'s `current_lesson` to `$ARGUMENTS` only if the

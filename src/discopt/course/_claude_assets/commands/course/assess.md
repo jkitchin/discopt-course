@@ -19,15 +19,16 @@ procedure:
 - Read `course/<track>/<id>/rubric.md`.
 - Read the student's `course/<track>/<id>/exercises.ipynb`.
 - Read the optional `course/<track>/<id>/writing_response.md`.
-- Use the reference solution at `course/solutions/<track>/<id>/exercises.ipynb`
-  (instructor-only path; the `solutions/` tree is gitignored on student
-  distributions, so this read may fail in a student clone — degrade
-  gracefully and grade only against the rubric in that case).
+- If an instructor has provided reference solutions, use
+  `course/solutions/<track>/<id>/exercises.ipynb`. The published
+  discopt-course package does **not** ship a `solutions/` tree, so this read
+  normally fails for students — degrade gracefully and grade against the
+  rubric (and by running the student's cells) in that case.
 
 **Workspace safety.** The student's `exercises.ipynb` is the live file they
-edit. Do NOT overwrite it during grading. Do NOT regenerate it via
-`python course/_build/nbgen.py`; nbgen has overwrite-safety that detects
-student edits, but the assessor must never touch the file regardless.
+edit. Do NOT overwrite it during grading, and do NOT suggest
+`discopt tutor install --force`, which would replace it with the blank
+packaged copy. To check that code runs, execute it in a scratch copy.
 
 **Progress write.** After grading, atomically update
 `course/progress.yaml` under `scores.<track>/<id>`:
@@ -38,6 +39,7 @@ student edits, but the assessor must never touch the file regardless.
 - append `last_assessed: <ISO date>`.
 
 If `course/progress.yaml` doesn't yet exist, copy
-`course/progress.template.yaml` first.
+`course/progress.template.yaml` first (`discopt tutor install` normally
+seeds it).
 
 Produce the structured feedback report and update `progress.yaml`.

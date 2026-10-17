@@ -19,7 +19,8 @@ Otherwise, score it on:
 - clarity
 - technical correctness
 - use of citations (verify every `{cite:p}` key resolves in
-  `docs/references.bib`; flag invented or unverifiable keys explicitly)
+  `course/references.bib` — what lesson files call `docs/references.bib`;
+  flag invented or unverifiable keys explicitly)
 - engagement with the prompt
 
 **Preserve the exercises score.** Read the existing

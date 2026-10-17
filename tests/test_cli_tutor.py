@@ -541,3 +541,146 @@ class TestLaunchSlash:
         rc = tutor._launch_slash("/course:lesson basic/02_lp_fundamentals")
         assert rc == 0
         assert captured["argv"] == ["/fake/claude", "/course:lesson basic/02_lp_fundamentals"]
+
+
+# ──────────────────────────────────────────────────────────
+# Regression tests for the discopt 0.9 alignment pass
+# ──────────────────────────────────────────────────────────
+
+
+class TestResolveBareNumbers:
+    def test_unpadded_number(self, fake_course):
+        assert tutor._resolve_lesson(fake_course, "2") == "basic/02_lp_fundamentals"
+        assert tutor._resolve_lesson(fake_course, "1") == "basic/01_intro_to_optimization"
+
+    def test_one_does_not_match_teens(self, tmp_path):
+        course = _make_course(tmp_path)
+        d = course / "intermediate" / "12_interior_point_methods"
+        d.mkdir(parents=True)
+        (d / "reading.ipynb").write_text("{}")
+        assert tutor._resolve_lesson(course, "1") == "basic/01_intro_to_optimization"
+        assert tutor._resolve_lesson(course, "12") == "intermediate/12_interior_point_methods"
+
+
+class TestMalformedProgress:
+    def test_bare_and_scalar_entries_do_not_crash(self, fake_course, capsys):
+        pytest.importorskip("yaml")
+        (fake_course / "progress.yaml").write_text(
+            "current_lesson: basic/01_intro_to_optimization\n"
+            "scores:\n"
+            "  basic/01_intro_to_optimization:\n"
+            "  basic/02_lp_fundamentals: 85\n"
+            "  basic/03_modeling_in_discopt: {total: 90}\n"
+        )
+        assert tutor._cmd_dashboard(_ns(), fake_course) == 0
+        assert tutor._cmd_list(_ns(), fake_course) == 0
+        out = capsys.readouterr().out
+        assert "1 / 3" in out
+        assert " 90   basic/03_modeling_in_discopt" in out
+
+    def test_non_mapping_file(self, fake_course, capsys):
+        pytest.importorskip("yaml")
+        (fake_course / "progress.yaml").write_text("- just\n- a list\n")
+        assert tutor._cmd_dashboard(_ns(), fake_course) == 0
+
+
+class TestResetAll:
+    def test_yes_flag_skips_prompt(self, fake_course, monkeypatch):
+        (fake_course / "progress.yaml").write_text("scores: {basic/01: {total: 5}}\n")
+
+        def boom(*_a, **_k):
+            raise AssertionError("must not prompt with --yes")
+
+        monkeypatch.setattr("builtins.input", boom)
+        rc = tutor._cmd_reset(_ns(lesson=None, yes=True), fake_course)
+        assert rc == 0
+        assert (fake_course / "progress.yaml").read_text() == (
+            fake_course / "progress.template.yaml"
+        ).read_text()
+
+    def test_eof_aborts_without_wiping(self, fake_course, monkeypatch, capsys):
+        original = "scores: {basic/01: {total: 5}}\n"
+        (fake_course / "progress.yaml").write_text(original)
+
+        def eof(*_a, **_k):
+            raise EOFError
+
+        monkeypatch.setattr("builtins.input", eof)
+        rc = tutor._cmd_reset(_ns(lesson=None, yes=False), fake_course)
+        assert rc == 0
+        assert (fake_course / "progress.yaml").read_text() == original
+        assert "aborted" in capsys.readouterr().out
+
+    def test_argparse_accepts_yes(self):
+        parser = argparse.ArgumentParser()
+        sub = parser.add_subparsers(dest="command")
+        tutor.add_subparser(sub)
+        args = parser.parse_args(["tutor", "reset", "-y"])
+        assert args.yes is True and args.lesson is None
+
+
+class TestInstallSeedsProgress:
+    def _assets(self, course):
+        (course / "_claude_assets" / "commands" / "course").mkdir(parents=True)
+        (course / "_claude_assets" / "commands" / "course" / "lesson.md").write_text("x\n")
+
+    def test_seeds_progress_from_template(self, fake_course, tmp_path, monkeypatch):
+        self._assets(fake_course)
+        work = tmp_path / "ws"
+        work.mkdir()
+        monkeypatch.chdir(work)
+        assert tutor._cmd_install(_ns(force=False), fake_course) == 0
+        assert (work / "course" / "progress.yaml").read_text() == (
+            fake_course / "progress.template.yaml"
+        ).read_text()
+
+    def test_force_never_overwrites_progress(self, fake_course, tmp_path, monkeypatch):
+        self._assets(fake_course)
+        work = tmp_path / "ws"
+        (work / "course").mkdir(parents=True)
+        (work / "course" / "progress.yaml").write_text("scores: {mine: {total: 99}}\n")
+        monkeypatch.chdir(work)
+        assert tutor._cmd_install(_ns(force=True), fake_course) == 0
+        assert "mine" in (work / "course" / "progress.yaml").read_text()
+
+    def test_package_modules_not_copied(self, fake_course, tmp_path, monkeypatch):
+        self._assets(fake_course)
+        (fake_course / "cli.py").write_text("# module\n")
+        work = tmp_path / "ws"
+        work.mkdir()
+        monkeypatch.chdir(work)
+        tutor._cmd_install(_ns(force=False), fake_course)
+        assert not (work / "course" / "cli.py").exists()
+
+
+class TestRunErrors:
+    def test_invalid_env_var_is_named(self, tmp_path, monkeypatch, capsys):
+        monkeypatch.setenv("DISCOPT_COURSE_DIR", str(tmp_path / "nope"))
+        rc = tutor.run(_ns(tutor_func=tutor._cmd_list))
+        assert rc == 1
+        assert "DISCOPT_COURSE_DIR" in capsys.readouterr().err
+
+
+class TestPackagedInstall:
+    """Install from the real packaged tree (what `discopt tutor install` uses)."""
+
+    def test_real_install_end_to_end(self, tmp_path, monkeypatch):
+        pkg = tutor._packaged_course_dir()
+        assert pkg is not None
+        monkeypatch.delenv("DISCOPT_COURSE_DIR", raising=False)
+        monkeypatch.chdir(tmp_path)
+        assert tutor.run(_ns(tutor_func=tutor._cmd_install, force=False)) == 0
+        claude = tmp_path / ".claude"
+        for name in ("lesson", "hint", "assess", "grade-writing", "progress", "cite-check"):
+            assert (claude / "commands" / "course" / f"{name}.md").is_file()
+        assert (claude / "skills" / "course-assessor" / "SKILL.md").is_file()
+        course = tmp_path / "course"
+        assert (course / "SYLLABUS.md").is_file()
+        assert (course / "references.bib").is_file()
+        assert (course / "progress.yaml").is_file()
+        assert not (course / "_claude_assets").exists()
+        assert not (course / "__init__.py").exists()
+        assert not (course / "cli.py").exists()
+        # The walk-up search now finds the writable copy, not the package.
+        assert tutor._find_course_dir() == course.resolve()
+        assert len(tutor._list_lessons(course)) == 30

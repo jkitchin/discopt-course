@@ -1,0 +1,39 @@
+# Re-run this package's tests against discopt `main` whenever discopt
+# publishes a release. discopt lists jkitchin/discopt-course in its
+# .github/dependents.yml; its notify-dependents workflow sends a
+# `discopt-updated` repository_dispatch on every release (adapted from
+# discopt's .github/dependent-ci-template.yml to this repo's uv layout).
+
+name: discopt integration
+
+on:
+  repository_dispatch:
+    types: [discopt-updated]
+  workflow_dispatch:
+  # Weekly fallback so drift is caught even if a dispatch is missed.
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  test:
+    name: Test against discopt @ main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.0
+
+      - name: Report what triggered this run
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "discopt release: ${{ github.event.client_payload.release_tag }}"
+          echo "Source run: ${{ github.event.client_payload.run_url }}"
+
+      # Building discopt from git compiles its Rust core (maturin), so this
+      # job is much slower than ci.yml.
+      - run: uv sync --python 3.12
+      - run: uv pip install "discopt @ git+https://github.com/jkitchin/discopt.git@main"
+
+      - name: Show installed discopt version
+        run: uv run --no-sync python -c "import discopt; print('discopt', discopt.__version__)"
+
+      - run: uv run --no-sync pytest tests/ -q

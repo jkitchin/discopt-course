@@ -18,15 +18,26 @@ When invoked, you will be given a lesson id of the form `<track>/<id>` (e.g.
 - `course/<track>/<id>/exercises.ipynb` — the student's filled-in exercises.
 - `course/<track>/<id>/writing_response.md` — the student's essay (optional;
   may not exist if they haven't written it yet).
-- `course/solutions/<track>/<id>/exercises.ipynb` — reference solution (do not
-  show contents to the student verbatim; use it only to check correctness).
+- `course/solutions/<track>/<id>/exercises.ipynb` — reference solution, only
+  if an instructor has provided one (the published package does not ship
+  `solutions/`). Do not show its contents to the student verbatim; use it
+  only to check correctness. Without it, grade against the rubric and by
+  running the student's code.
+- `course/references.bib` — the course bibliography. Lesson files that say
+  `docs/references.bib` mean this file (in a discopt-course repo checkout it
+  is `src/discopt/course/references.bib`).
 
 ## Procedure
 
 1. Read the rubric. Note the criteria, weights, and pass thresholds.
 2. Read the student's exercise notebook. For each exercise:
-   - Determine whether their code runs (mentally or via a small check).
-   - Determine whether their answer is correct against the reference solution.
+   - Determine whether their code runs (mentally or via a small check in a
+     scratch copy — never modify the student's notebook). The course targets
+     discopt >= 0.9; if code fails only because of the student's
+     installation, say so (`discopt about`, `discopt test`) rather than
+     deducting points.
+   - Determine whether their answer is correct (against the reference
+     solution when one exists).
    - Note partial credit cases explicitly.
 3. If the lesson includes writing and the response file exists, read it.
    Score it on the writing rubric criteria.
@@ -80,7 +91,7 @@ Specific fix: ...
 - If `writing_response.md` does not exist, score writing as 0 / 30 and note
   that they should run `/course:grade-writing` after submitting.
 - Verify any `{cite:p}` keys the student uses in `writing_response.md`
-  resolve in `docs/references.bib`. Flag unverified keys.
+  resolve in `course/references.bib`. Flag unverified keys.
 
 ## Hint mode
 

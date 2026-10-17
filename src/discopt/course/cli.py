@@ -6,10 +6,16 @@ command (lesson, hint, assess, progress). The lesson library, grading
 rubrics, and progress tracking all live under ``course/``; this module
 adds no separate state.
 
-The course content ships as package data under ``discopt.course`` so a
-pip install includes it. ``discopt tutor install`` materializes a
-writable copy of the tree into the user's working directory and drops
-the ``/course:`` slash commands into ``./.claude/``.
+The course content ships as package data under ``discopt.course`` (the
+``discopt-course`` distribution), so installing it includes the whole
+tree. ``discopt tutor install`` materializes a writable copy of the tree
+into the user's working directory and drops the ``/course:`` slash
+commands into ``./.claude/``.
+
+This module is a ``discopt.cli`` plugin: the base ``discopt`` CLI finds it
+through the ``[project.entry-points."discopt.cli"]`` ``tutor`` entry, calls
+:func:`add_subparser` to register the ``tutor`` subparser, and hands the
+parsed namespace to :func:`run`, exiting with its return code.
 
 Subcommands:
 
@@ -17,10 +23,13 @@ Subcommands:
 * ``discopt tutor list``                  — every lesson with completion status
 * ``discopt tutor start <lesson>``        — launch ``claude /course:lesson <lesson>``
 * ``discopt tutor resume``                — start whatever ``current_lesson`` is
-* ``discopt tutor next``                  — start the next-numbered lesson after ``current_lesson``
-* ``discopt tutor reset [<lesson>]``      — drop one entry from progress.yaml (or all)
-* ``discopt tutor install [--force]``     — copy the ``/course:`` slash commands
-                                            into ``./.claude/``
+* ``discopt tutor next``                  — start the lesson to work on next: ``current_lesson``
+                                            until it is passed (>= 70), then the one after it
+* ``discopt tutor reset [<lesson>] [-y]`` — drop one entry from progress.yaml (or all)
+* ``discopt tutor install [--force]``     — materialize ``./course/`` (seeding
+                                            ``progress.yaml``) and copy the
+                                            ``/course:`` slash commands into
+                                            ``./.claude/``
 """
 
 from __future__ import annotations
@@ -104,9 +113,11 @@ def _resolve_lesson(course_dir: Path, name: str) -> str | None:
     # Strip leading track if present but unknown
     short = name.split("/", 1)[-1]
     matches = [le for le in all_lessons if le.split("/", 1)[1].startswith(short)]
-    if not matches and re.fullmatch(r"\d+", short):
-        # bare lesson number, e.g. "16"
-        matches = [le for le in all_lessons if le.split("/", 1)[1].startswith(short + "_")]
+    if re.fullmatch(r"\d+", short):
+        # bare lesson number, e.g. "16", "02" or "2" (lesson dirs are
+        # zero-padded to two digits, so "1" must not prefix-match 10..19).
+        prefix = f"{int(short):02d}_"
+        matches = [le for le in all_lessons if le.split("/", 1)[1].startswith(prefix)]
     if len(matches) == 1:
         return matches[0]
     return None
@@ -135,14 +146,22 @@ def _load_progress(course_dir: Path) -> dict | None:
 
 
 def _scores_for(progress: dict | None) -> dict:
-    if not progress:
+    """Return the ``scores`` map, keeping only well-formed (dict) entries.
+
+    ``progress.yaml`` is hand- and Claude-edited, so tolerate a bare
+    ``basic/01_...:`` key (``None``) or a stray scalar without crashing the
+    dashboard or ``list``.
+    """
+    if not isinstance(progress, dict):
         return {}
     scores = progress.get("scores") or {}
-    return scores if isinstance(scores, dict) else {}
+    if not isinstance(scores, dict):
+        return {}
+    return {k: v for k, v in scores.items() if isinstance(v, dict)}
 
 
 def _current_lesson(progress: dict | None) -> str | None:
-    if not progress:
+    if not isinstance(progress, dict):
         return None
     cl = progress.get("current_lesson")
     return cl if isinstance(cl, str) else None
@@ -274,7 +293,10 @@ def _cmd_list(_args, course_dir: Path) -> int:
     current = _current_lesson(progress)
 
     if progress is None and not _progress_path(course_dir).exists():
-        print("(no progress.yaml yet — run /course:progress in claude to initialize)\n")
+        print(
+            "(no progress.yaml yet — run `discopt tutor install`, or /course:progress "
+            "in claude, to initialize)\n"
+        )
 
     for le in lessons:
         entry = scores.get(le) or {}
@@ -347,10 +369,15 @@ def _cmd_reset(args, course_dir: Path) -> int:
         if not tmpl.exists():
             print("progress.template.yaml is missing; refusing to delete progress.yaml.")
             return 1
-        confirm = input(f"reset all progress at {path}? [y/N] ").strip().lower()
-        if confirm != "y":
-            print("aborted.")
-            return 0
+        if not getattr(args, "yes", False):
+            try:
+                confirm = input(f"reset all progress at {path}? [y/N] ").strip().lower()
+            except EOFError:
+                # Non-interactive stdin: never wipe progress without consent.
+                confirm = ""
+            if confirm != "y":
+                print("aborted (pass --yes to reset without prompting).")
+                return 0
         shutil.copy2(tmpl, path)
         print(f"reset {path} from template.")
         return 0
@@ -386,9 +413,9 @@ def _is_py_artifact(rel: Path) -> bool:
     """Reject Python build artifacts that leak through editable installs."""
     if "__pycache__" in rel.parts:
         return True
-    if rel.name == "__init__.py" and len(rel.parts) == 1:
-        # The course/__init__.py we added to make it a package — student
-        # shouldn't see it in their materialized copy.
+    if rel.suffix == ".py" and len(rel.parts) == 1:
+        # The package's own modules (course/__init__.py, cli.py) — the
+        # student shouldn't see them in their materialized copy.
         return True
     return rel.suffix in _PY_ARTIFACT_SUFFIXES
 
@@ -460,6 +487,17 @@ def _cmd_install(args, course_dir: Path) -> int:
     print(f"\ninstalled {total} file(s); {total_skipped} skipped.")
     if total_skipped:
         print("  pass --force to overwrite existing files.")
+
+    # Seed the student's progress file so `resume`/`next`/`reset` work right
+    # away. Never overwrite an existing one, even with --force: it holds the
+    # student's scores, not packaged content.
+    progress = _progress_path(course_dest)
+    template = course_dest / "progress.template.yaml"
+    if not progress.exists() and template.exists() and not _is_read_only(course_dest):
+        shutil.copy2(template, progress)
+        print(f"initialized {progress} from progress.template.yaml.")
+
+    print("\nnext: `discopt tutor start 01` (or `discopt tutor resume`).")
     return 0
 
 
@@ -485,23 +523,36 @@ def add_subparser(subparsers) -> None:
     p_list.set_defaults(tutor_func=_cmd_list)
 
     p_start = tutor_sub.add_parser("start", help="launch a specific lesson")
-    p_start.add_argument("lesson", help="lesson id, e.g. basic/02_lp_fundamentals or just 02")
+    p_start.add_argument(
+        "lesson", help="lesson id, e.g. basic/02_lp_fundamentals, 02_lp_fundamentals, or 2"
+    )
     p_start.set_defaults(tutor_func=_cmd_start)
 
     p_resume = tutor_sub.add_parser("resume", help="continue current_lesson")
     p_resume.set_defaults(tutor_func=_cmd_resume)
 
-    p_next = tutor_sub.add_parser("next", help="start the next-numbered lesson")
+    p_next = tutor_sub.add_parser(
+        "next", help="start the next lesson (current_lesson until passed, then the one after)"
+    )
     p_next.set_defaults(tutor_func=_cmd_next)
 
     p_reset = tutor_sub.add_parser("reset", help="reset progress (one lesson, or all)")
     p_reset.add_argument("lesson", nargs="?", help="lesson id; omit to reset all")
+    p_reset.add_argument(
+        "-y", "--yes", action="store_true", help="reset all progress without prompting"
+    )
     p_reset.set_defaults(tutor_func=_cmd_reset)
 
     p_install = tutor_sub.add_parser(
-        "install", help="install /course: slash commands into ./.claude/"
+        "install",
+        help="materialize a writable ./course/ and install /course: slash commands into ./.claude/",
     )
-    p_install.add_argument("--force", action="store_true", help="overwrite existing files")
+    p_install.add_argument(
+        "--force",
+        action="store_true",
+        help="overwrite existing files (including notebooks you have edited; "
+        "progress.yaml is never overwritten)",
+    )
     p_install.set_defaults(tutor_func=_cmd_install)
 
     # Bare `discopt tutor` (no subcommand) shows the dashboard.
@@ -517,18 +568,28 @@ def run(args) -> int:
         course_dir = _packaged_course_dir()
         if course_dir is None:
             print(
-                "packaged course/ not found inside the discopt wheel; can't install.",
+                "packaged course/ not found inside the discopt-course install; "
+                "can't install. Reinstall discopt-course.",
                 file=sys.stderr,
             )
             return 1
         return int(args.tutor_func(args, course_dir))
     course_dir = _find_course_dir()
     if course_dir is None:
-        print(
-            "course/ directory not found. Run from a discopt checkout that "
-            "contains course/SYLLABUS.md, or set DISCOPT_COURSE_DIR.",
-            file=sys.stderr,
-        )
+        env = os.environ.get("DISCOPT_COURSE_DIR")
+        if env:
+            print(
+                f"DISCOPT_COURSE_DIR={env!r} does not contain SYLLABUS.md. "
+                "Point it at a course/ tree or unset it.",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                "course/ directory not found. Run `discopt tutor install` to "
+                "materialize ./course/, run from a directory below one, or set "
+                "DISCOPT_COURSE_DIR.",
+                file=sys.stderr,
+            )
         return 1
     rc: int = args.tutor_func(args, course_dir)
     return rc
