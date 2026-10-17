@@ -1,9 +1,9 @@
 # Rubric — Lesson 25
 
 ## Exercises (70)
-- E1 (15) Box vs ellipsoid — both solved; comparison.
+- E1 (15) Box vs ellipsoid — both solved by hand and with `discopt.ro`; agreement and worst-case row value checked; comparison.
 - E2 (15) Price-of-robustness curve.
-- E3 (15) LDR-adjustable RO works; better than static.
+- E3 (15) LDR-adjustable RO works (non-anticipative rules); better than static.
 - E4 (15) RO vs SP compared meaningfully.
 - E5 (10) Scheduling with uncertain times.
 
@@ -16,7 +16,7 @@
 - **Technical correctness (10):** every claim about complexity, an algorithm,
   or a solver's behaviour is either a citation or a derivation; nothing
   factually wrong per the assessor's checklist for this lesson.
-- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `docs/references.bib`,
+- **Citations (5):** ≥ 2 `{cite:p}` keys resolve in `course/references.bib`,
   at least one of which is a recommended reference for this lesson; no
   invented or unverifiable keys.
 - **Engagement (5):** the response cites a specific surprise, equation,

@@ -12,4 +12,4 @@
 5. **Discussion** (~400 words): when does your method help? When does it
    hurt? What would you do next?
 
-Cite ≥ 5 references from `docs/references.bib`.
+Cite ≥ 5 references from `course/references.bib`.
