@@ -8,26 +8,29 @@ course lived in the base package (discopt 0.5 and earlier).
 
 The course is a self-paced, Claude-Code-assisted curriculum in mathematical
 optimization, taught through the `discopt` solver. Three tracks — basic,
-intermediate, and advanced — total 30 core lessons, plus two optional
-electives (dynamic optimization, multi-objective), each pairing a reading notebook
+intermediate, and advanced — total 30 core lessons, plus three optional
+electives (dynamic optimization, multi-objective, piecewise-linear and grey-box
+models), each pairing a reading notebook
 with an exercise notebook, a writing prompt, and a grading rubric. The
 foundations lean on the standard references {cite:p}`Boyd2004,Nocedal2006`.
 Claude Code acts as the teaching assistant: it delivers material, answers
 questions, hints when you are stuck, and grades your work against the rubric
-via the `/course:` slash commands bundled with the package.
+via the `/course:` slash commands bundled with the package. Other agents
+(Codex, Cursor, OpenCode, ...) can run the course through the bundled
+`discopt-course` and `course-assessor` Agent Skills, installable with
+`uvx knowhow add jkitchin/discopt-course --all`.
 
 ## Install
 
-discopt-course is installed from GitHub (it is not on PyPI). The lessons
-currently track discopt's `main` branch, which is newer than the 0.9.0 release
-on PyPI, so install discopt from git first (this needs a Rust toolchain):
+discopt-course is installed from GitHub (it is not on PyPI). It depends on
+`discopt[jax]>=0.10`, which installs from PyPI as prebuilt wheels:
 
 ```bash
-pip install "discopt @ git+https://github.com/jkitchin/discopt.git@main"
 pip install "git+https://github.com/jkitchin/discopt-course.git"
 ```
 
-Requires Python 3.12+ and discopt 0.9.1.dev0 or newer. Installing this package registers the `tutor` subcommand
+Requires Python 3.12+ and discopt 0.10 or newer with the `jax` extra (JAX is
+optional in discopt since 0.10, but several lessons use JAX-only features). Installing this package registers the `tutor` subcommand
 with the base discopt CLI automatically. The interactive verbs also need
 [Claude Code](https://claude.com/claude-code) (`claude` on your PATH).
 

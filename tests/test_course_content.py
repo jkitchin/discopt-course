@@ -19,7 +19,7 @@ pytestmark = pytest.mark.smoke
 ROOT = package_root()
 REPO = Path(__file__).resolve().parents[1]
 TRACKS = ("basic", "intermediate", "advanced", "electives")
-N_LESSONS = 32  # 30 core lessons + electives 31-32
+N_LESSONS = 33  # 30 core lessons + electives 31-33
 LESSON_FILES = ("reading.ipynb", "exercises.ipynb", "writing.md", "rubric.md")
 
 _CITE = re.compile(r"\{cite:[pt]\}`([^`]*)`")

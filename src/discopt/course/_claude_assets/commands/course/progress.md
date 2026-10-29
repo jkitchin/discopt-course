@@ -17,7 +17,7 @@ Show the student's progress through the course.
    basic          7 / 10                82           basic/08_unconstrained_nlp
    intermediate   0 / 10                -            (locked - finish basic first)
    advanced       0 / 10                -            (locked)
-   electives      0 / 2                 -            (31 after intermediate, 32 after basic)
+   electives      0 / 3                 -            (31 after intermediate, 32-33 after basic)
    ```
 
 4. Highlight any lessons below the 70-point threshold and recommend
@@ -27,5 +27,6 @@ Show the student's progress through the course.
 A track is "unlocked" if the student has completed (≥70 on every lesson) the
 prior track. Lessons within a track unlock in order. Electives are optional
 and unlock individually: 31 (dynamic optimization) after the intermediate
-track, 32 (multi-objective) after the basic track. They never block
+track, 32 (multi-objective) and 33 (piecewise-linear and grey-box models)
+after the basic track. They never block
 progress through the core tracks.

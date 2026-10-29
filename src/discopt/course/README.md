@@ -1,16 +1,19 @@
 # discopt: An Optimization Course
 
-A self-paced, Claude-Code-assisted course in mathematical optimization, taught
+A self-paced, LLM-assisted course in mathematical optimization, taught
 through the `discopt` solver. Three core tracks (basic, intermediate, advanced)
-totalling **30 lessons**, plus two optional electives (dynamic optimization,
-multi-objective), each pairing a reading notebook with an exercise
+totalling **30 lessons**, plus three optional electives (dynamic optimization,
+multi-objective, piecewise-linear and grey-box models), each pairing a reading notebook with an exercise
 notebook, a writing prompt, and a rubric. Claude Code acts as your TA: it
 delivers material, answers questions, hints when you're stuck, and grades your
 work against the rubric.
 
-The course tracks **discopt `main`** (0.9.1.dev0 or newer; check with
-`discopt about`) on Python 3.12+. Until the next discopt release, install
-discopt from git (see step 1 below).
+The course targets **discopt 0.10** or newer with the `jax` extra (check with
+`discopt about`) on Python 3.12+. Claude Code is the default TA; other agents
+can run the course through the bundled `discopt-course` and `course-assessor`
+Agent Skills (`discopt tutor install` puts them in `.claude/skills/`, and
+`uvx knowhow add jkitchin/discopt-course --all` installs them for any
+supported agent).
 
 ## How the course works
 
@@ -31,13 +34,11 @@ answer.
 ## Quick start
 
 ```bash
-# 1. Install discopt from git main (needs a Rust toolchain until the next
-#    discopt release), then discopt-course and Jupyter
-pip install "discopt @ git+https://github.com/jkitchin/discopt.git@main"
+# 1. Install discopt-course (pulls in discopt[jax]>=0.10) and Jupyter
 pip install "git+https://github.com/jkitchin/discopt-course.git" jupyterlab
 
 # 2. In a working directory of your choice: materialize a writable course/,
-#    install the /course: slash commands + assessor skill into ./.claude/,
+#    install the /course: slash commands + the two skills into ./.claude/,
 #    and seed course/progress.yaml
 discopt tutor install
 
@@ -89,9 +90,11 @@ exercise answers — that defeats the point of the course.
   NN-embedded MINLP, robust optimization, ML-for-OR, differentiable
   optimization, bilevel, reformulations. Capstone is a paper-style writeup
   with computational results.
-- **Electives (31–32, optional)**: dynamic optimization and optimal control
+- **Electives (31–33, optional)**: dynamic optimization and optimal control
   with `discopt.dae` (after intermediate); multi-objective optimization with
-  `discopt.mo` (after basic). They never block the core tracks.
+  `discopt.mo` (after basic); piecewise-linear approximation and grey-box
+  models with `m.piecewise`, `dm.nonlinear_to_pwl` and `dm.external` (after
+  basic). They never block the core tracks.
 
 ## Progress tracking
 
