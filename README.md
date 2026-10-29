@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/discopt-course-logo.svg" alt="discopt course logo: an open book with a gradient symbol and a descent path to a starred optimum" width="240">
+</p>
+
 # discopt-course
 
 [![ci](https://github.com/jkitchin/discopt-course/actions/workflows/ci.yml/badge.svg)](https://github.com/jkitchin/discopt-course/actions/workflows/ci.yml)
@@ -12,12 +16,12 @@ A self-paced, LLM-assisted course in mathematical optimization, taught
 through the `discopt` solver. Three core tracks (basic, intermediate, advanced)
 totalling **30 lessons**, plus three optional electives (dynamic optimization,
 multi-objective, piecewise-linear and grey-box models), each pairing a reading notebook with an exercise
-notebook, a writing prompt, and a rubric. Claude Code acts as your TA: it
+notebook, a writing prompt, and a rubric. An LLM agent acts as your TA: it
 delivers material, answers questions, hints when you're stuck, and grades your
-work against the rubric. Claude Code gets dedicated `/course:` slash
-commands; any agent that reads [Agent Skills](https://agentskills.io) (Codex,
-Cursor, OpenCode, Gemini CLI, ...) can run the course through the bundled
-skills (see [Running the course from an LLM](#running-the-course-from-an-llm)).
+work against the rubric. The course ships as [Agent Skills](https://agentskills.io)
+that any skills-aware agent can use (Claude Code, Codex, Cursor, OpenCode,
+Gemini CLI, ...), installable with [knowhow](https://github.com/jkitchin/knowhow).
+Claude Code also gets dedicated `/course:` slash commands.
 
 ## Install
 
@@ -36,25 +40,53 @@ JAX became an optional discopt extra in 0.10; the course depends on
 `discopt[jax]` because several lessons use the JAX-only features
 (`dm.custom`, `discopt.sensitivity`, `discopt.estimate`, the differentiable
 layer). Installing this package registers the `tutor` subcommand with the base discopt
-CLI automatically. You also need [Claude Code](https://claude.com/claude-code)
-(the `claude` binary on your PATH) for the interactive verbs, and Jupyter if
-you want to open the notebooks yourself (`pip install jupyterlab`).
+CLI automatically. Install Jupyter too if you want to open the notebooks
+yourself (`pip install jupyterlab`).
 
-## Quick start
+## Quick start with an LLM agent (knowhow)
+
+Install the course skills, and optionally discopt's own modeling skill and
+commands, with [knowhow](https://github.com/jkitchin/knowhow) v0.3+:
+
+```bash
+uvx knowhow add jkitchin/discopt-course --all   # the discopt-course tutor + course-assessor skills
+uvx knowhow add jkitchin/discopt --all          # optional: discopt's skill, commands and agents
+```
+
+Then, in an empty working directory, ask your agent to "start the discopt
+course". The `discopt-course` skill checks the install, runs
+`discopt tutor install`, shows your progress and walks you through lesson 1.
+Ask it for hints when you're stuck, and ask it to grade a lesson when you're
+done (that hands off to `course-assessor`).
+
+| Skill | What it does |
+| ----- | ------------ |
+| `discopt-course` | The tutor: setup, progress, choosing the next lesson, walking through a reading, graduated hints, citation checks. |
+| `course-assessor` | Grading against a lesson's rubric (exercises, writing, capstone milestones) and `progress.yaml` updates. |
+
+The skills live in `src/discopt/course/_claude_assets/skills/`; knowhow finds
+them through the root `skills/` symlink. They need only an agent that can run
+shell commands and read files. On Windows, clone with
+`git config core.symlinks true`, or install from the subpath
+`jkitchin/discopt-course/src/discopt/course/_claude_assets/skills`.
+
+## Quick start with the `discopt tutor` CLI
 
 ```bash
 discopt tutor                              # dashboard: counts + next lesson
-discopt tutor install                      # materialize a writable course/ + /course: commands
+discopt tutor install                      # materialize course/ + skills and /course: commands in .claude/
 discopt tutor list                         # every lesson with completion status
-discopt tutor start basic/01_intro_to_optimization   # launch a lesson in Claude Code
+discopt tutor start basic/01_intro_to_optimization   # launch a lesson in Claude Code (needs `claude`)
 discopt tutor start 1                      # ...or by number
 discopt tutor resume                       # continue the current lesson
 discopt tutor next                         # current lesson until passed, then the one after
 discopt tutor reset [<lesson>] [--yes]     # drop one progress entry (or all)
 ```
 
-`discopt tutor install` copies the `/course:` slash commands and the
-`course-assessor` skill into `./.claude/`, materializes a writable copy of the
+`start`, `resume` and `next` launch [Claude Code](https://claude.com/claude-code)
+(the `claude` binary must be on your PATH); the dashboard, `list`, `install` and
+`reset` work without it. `discopt tutor install` copies the `/course:` slash
+commands and both skills into `./.claude/`, materializes a writable copy of the
 course tree into `./course/`, and seeds `course/progress.yaml` from the
 template. Re-running it is safe; `--force` overwrites packaged files
 (including notebooks you have edited) but never `progress.yaml`. The packaged
@@ -113,32 +145,6 @@ Docs are a Jupyter Book:
 uv run jupyter-book build docs/
 ```
 
-## Running the course from an LLM
-
-The course ships two [Agent Skills](https://agentskills.io) under
-`src/discopt/course/_claude_assets/skills/`:
-
-| Skill | What it does |
-| ----- | ------------ |
-| `discopt-course` | The tutor: setup, progress, choosing the next lesson, walking through a reading, graduated hints, citation checks. |
-| `course-assessor` | Grading against a lesson's rubric (exercises, writing, capstone milestones) and `progress.yaml` updates. |
-
-They are written for any agent that can run shell commands and read files,
-not only Claude Code. Install them with
-[knowhow](https://github.com/jkitchin/knowhow) (v0.3+), which finds them
-through the root `skills/` symlink:
-
-```bash
-uvx knowhow add jkitchin/discopt-course --list   # 2 skills
-uvx knowhow add jkitchin/discopt-course --all    # install them for your agent(s)
-```
-
-Then ask your agent to "start the discopt course" in an empty working
-directory: the tutor skill installs the course (`discopt tutor install`) and
-takes it from there. `discopt tutor install` also installs both skills into
-`./.claude/skills/`. On Windows, clone with `git config core.symlinks true` or
-install from the subpath `jkitchin/discopt-course/src/discopt/course/_claude_assets/skills`.
-
 ## Claude Code slash commands
 
 The package bundles the `/course:` slash commands (lesson, hint, assess,
@@ -150,8 +156,9 @@ turn `/course:assess` into a bare `/assess`. `discopt tutor install` drops them 
 `bash course/install_skills.sh --user` to install them into `~/.claude/`).
 
 discopt itself ships separate, general-purpose Claude Code commands and expert
-agents (`/formulate`, `/debug`, `/diagnose`, `/reformulate`, ...), installed
-with `discopt install-skills`. They don't conflict with the `/course:`
+agents (`/formulate`, `/debug`, `/diagnose`, `/reformulate`, ...) and a
+`discopt` modeling skill, installed with `uvx knowhow add jkitchin/discopt --all`
+or `discopt install-skills`. They don't conflict with the `/course:`
 namespace; `/debug` is handy when a lesson cell fails because of your
 installation. (Using `/formulate` to write your exercise answers defeats the
 point of the course.)

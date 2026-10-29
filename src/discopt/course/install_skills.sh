@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Install the discopt course's slash commands and assessor skill into a
-# .claude/ directory.
+# Install the discopt course's slash commands and skills (discopt-course,
+# course-assessor) into a .claude/ directory.
 #
 # Prefer `discopt tutor install`, which also materializes a writable course/
 # tree and seeds progress.yaml. This script only installs the Claude Code
@@ -41,7 +41,7 @@ for arg in "$@"; do
   esac
 done
 
-mkdir -p "$DEST/commands/course" "$DEST/skills/course-assessor"
+mkdir -p "$DEST/commands/course"
 
 copy() {
   local src="$1" dst="$2"
@@ -58,7 +58,13 @@ for f in "$SRC"/commands/course/*.md; do
   copy "$f" "$DEST/commands/course/$(basename "$f")"
 done
 
-echo "Installing course-assessor skill -> $DEST/skills/course-assessor/"
-copy "$SRC/skills/course-assessor/SKILL.md" "$DEST/skills/course-assessor/SKILL.md"
+for d in "$SRC"/skills/*/; do
+  name="$(basename "$d")"
+  echo "Installing $name skill -> $DEST/skills/$name/"
+  mkdir -p "$DEST/skills/$name"
+  for f in "$d"*; do
+    copy "$f" "$DEST/skills/$name/$(basename "$f")"
+  done
+done
 
-echo "Done. Slash commands available: /course:lesson, /course:assess, /course:hint, /course:progress, /course:grade-writing, /course:cite-check"
+echo "Done. Skills: discopt-course, course-assessor. Slash commands available: /course:lesson, /course:assess, /course:hint, /course:progress, /course:grade-writing, /course:cite-check"
