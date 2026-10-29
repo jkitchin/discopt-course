@@ -60,6 +60,7 @@ track (NLP, KKT, interior point); lessons 32 and 33 assume the basic track.
 | -- | ----- | --------- | ------------------ |
 | 31 | Dynamic Optimization and Optimal Control | [`electives/31_dynamic_optimization`](electives/31_dynamic_optimization/) | Biegler2010, Betts2010, Cuthrell1987 |
 | 32 | Multi-Objective Optimization | [`electives/32_multi_objective`](electives/32_multi_objective/) | ehrgott-2005, miettinen-1999, mavrotas-2009 |
+| 33 | Piecewise-Linear Approximation and Grey-Box Models | [`electives/33_piecewise_and_greybox`](electives/33_piecewise_and_greybox/) | Vielma2010, Misener2011, Eason2016 |
 
 ## Pacing
 
