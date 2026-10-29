@@ -673,7 +673,8 @@ class TestPackagedInstall:
         claude = tmp_path / ".claude"
         for name in ("lesson", "hint", "assess", "grade-writing", "progress", "cite-check"):
             assert (claude / "commands" / "course" / f"{name}.md").is_file()
-        assert (claude / "skills" / "course-assessor" / "SKILL.md").is_file()
+        for skill in ("course-assessor", "discopt-course"):
+            assert (claude / "skills" / skill / "SKILL.md").is_file()
         course = tmp_path / "course"
         assert (course / "SYLLABUS.md").is_file()
         assert (course / "references.bib").is_file()

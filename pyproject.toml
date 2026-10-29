@@ -12,10 +12,12 @@ license = { text = "EPL-2.0" }
 authors = [{ name = "John Kitchin", email = "jkitchin@andrew.cmu.edu" }]
 dependencies = [
     # The "discopt.cli" plugin hook landed in 0.6, but the lesson notebooks
-    # track discopt `main` (0.9.1.dev0 at the time of writing): they rely on
-    # fixes and options that are not in the 0.9.0 release. ">0.9.0" admits
-    # 0.9.1.dev builds from git and any later release.
-    "discopt>0.9.0",
+    # target discopt 0.10 (Model.piecewise, dm.external, Model.convexity(),
+    # SolveResult.termination, milp_backend=, the GDP algorithms, ...).
+    # JAX became an optional extra in 0.10 (#1873). Several lessons use the
+    # JAX-only features on purpose (dm.custom, discopt.sensitivity,
+    # discopt.estimate, the differentiable layer, ml.train), so require it.
+    "discopt[jax]>=0.10.0",
     # The tutor reads/writes the student's progress.yaml; the reset verb and
     # progress dashboard need PyYAML at runtime.
     "pyyaml>=6",
@@ -84,10 +86,3 @@ extend-exclude = [
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
-
-# Until the next discopt release, resolve discopt from its git `main` (the
-# lessons use fixes and options newer than 0.9.0). Building from git compiles
-# discopt's Rust core, so `uv sync` needs a Rust toolchain. REMOVE this block
-# and raise the floor in [project].dependencies once that release is on PyPI.
-[tool.uv.sources]
-discopt = { git = "https://github.com/jkitchin/discopt", branch = "main" }
