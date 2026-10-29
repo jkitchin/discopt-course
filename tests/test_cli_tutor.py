@@ -673,7 +673,8 @@ class TestPackagedInstall:
         claude = tmp_path / ".claude"
         for name in ("lesson", "hint", "assess", "grade-writing", "progress", "cite-check"):
             assert (claude / "commands" / "course" / f"{name}.md").is_file()
-        assert (claude / "skills" / "course-assessor" / "SKILL.md").is_file()
+        for skill in ("course-assessor", "discopt-course"):
+            assert (claude / "skills" / skill / "SKILL.md").is_file()
         course = tmp_path / "course"
         assert (course / "SYLLABUS.md").is_file()
         assert (course / "references.bib").is_file()
@@ -683,4 +684,4 @@ class TestPackagedInstall:
         assert not (course / "cli.py").exists()
         # The walk-up search now finds the writable copy, not the package.
         assert tutor._find_course_dir() == course.resolve()
-        assert len(tutor._list_lessons(course)) == 32  # 30 core + 2 electives
+        assert len(tutor._list_lessons(course)) == 33  # 30 core + 3 electives

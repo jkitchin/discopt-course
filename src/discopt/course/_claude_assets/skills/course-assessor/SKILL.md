@@ -1,6 +1,8 @@
 ---
 name: course-assessor
-description: Assess a discopt-course lesson - load the rubric, read the student's exercise notebook and (optional) writing response, then produce structured feedback and update progress.yaml. Trigger when the user runs /course:assess or /course:grade-writing, or otherwise asks Claude to grade a lesson.
+description: Assess a discopt-course lesson - load the rubric, read the student's exercise notebook and (optional) writing response, then produce structured feedback and update course/progress.yaml; also gives graduated hints. Use when the student asks to grade, assess or score a lesson, its writing, or a capstone milestone (in Claude Code, /course:assess, /course:grade-writing or /course:hint), or asks for a hint on an exercise.
+license: EPL-2.0
+compatibility: Requires a materialized course/ tree (`discopt tutor install`) and discopt 0.10+ with the jax extra to run the student's code. Agent-neutral; the /course slash commands are Claude Code shortcuts for the same procedures.
 ---
 
 # discopt course assessor
@@ -33,9 +35,9 @@ When invoked, you will be given a lesson id of the form `<track>/<id>` (e.g.
 2. Read the student's exercise notebook. For each exercise:
    - Determine whether their code runs (mentally or via a small check in a
      scratch copy — never modify the student's notebook). The course targets
-     discopt main (0.9.1.dev0 or newer); if code fails only because of the student's
-     installation, say so (`discopt about`, `discopt test`) rather than
-     deducting points.
+     discopt 0.10 or newer with the `jax` extra; if code fails only because of
+     the student's installation (for example `MissingJaxError`), say so
+     (`discopt about`, `discopt test`) rather than deducting points.
    - Determine whether their answer is correct (against the reference
      solution when one exists).
    - Note partial credit cases explicitly.
@@ -44,6 +46,27 @@ When invoked, you will be given a lesson id of the form `<track>/<id>` (e.g.
 4. Score each criterion. Sum to a total out of 100.
 5. Produce a markdown feedback report (template below).
 6. Append/update `course/progress.yaml` under `scores.<track>/<id>`.
+
+## Variants
+
+- **Writing only.** Read `writing.md`, the writing criteria in `rubric.md`
+  (the last 30 points) and `writing_response.md`. If the response does not
+  exist, ask the student to write it (you may suggest an outline) and stop.
+  Update only `scores.<id>.writing` and `last_assessed_writing: <ISO date>`.
+  Recompute `total` only if `exercises` is already set; otherwise write
+  `total: null` and say that a full assessment is still needed.
+- **Capstone milestones** (`advanced/30_capstone_advanced` only). Milestone
+  N is 1 (proposal), 2 (method and initial results) or 3 (final paper).
+  Grade `course/<track>/<id>/milestone_<N>.md` against that milestone's part
+  of the rubric. Refuse a milestone request for any other lesson.
+- **Progress writes.** If `course/progress.yaml` is missing, copy
+  `course/progress.template.yaml` first. Keep every existing field under
+  `scores.<id>` that you are not overwriting (`exercises`, `writing`,
+  `attempts`, `hints_used`), and recompute `total = exercises + writing` only
+  when both are present.
+- **Workspace safety.** Run the student's code in a scratch copy, never in
+  their `exercises.ipynb`. Never suggest `discopt tutor install --force`: it
+  replaces their notebooks with blank copies.
 
 ## Feedback template
 
@@ -89,13 +112,15 @@ Specific fix: ...
 - If the student score is below 70, add a `recommended_revisions` block to
   the feedback rather than marking the lesson complete.
 - If `writing_response.md` does not exist, score writing as 0 / 30 and note
-  that they should run `/course:grade-writing` after submitting.
+  that they should ask for a writing-only grade (`/course:grade-writing` in
+  Claude Code) after submitting.
 - Verify any `{cite:p}` keys the student uses in `writing_response.md`
   resolve in `course/references.bib`. Flag unverified keys.
 
 ## Hint mode
 
-When invoked via `/course:hint`, do NOT grade. Instead:
+When the student asks for a hint (`/course:hint` in Claude Code), do NOT
+grade. Instead:
 
 1. Identify which exercise the student is asking about.
 2. Use a graduated-hint protocol:

@@ -19,3 +19,6 @@ docs/_build/
 
 # pytest
 .pytest_cache/
+
+# uv lockfile (not tracked; CI resolves from pyproject.toml)
+uv.lock
