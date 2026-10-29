@@ -4,7 +4,7 @@
 - E1 (10) Four inequalities; tightness analysis.
 - E2 (15) 3D plots show envelope and refined envelope.
 - E3 (15) αBB computation; plot.
-- E4 (20) Pooling solved locally from several starts (local optima found, e.g. 100 vs 400), globally with the default, and with `rlt=True` / `partitions`; objectives, bounds, nodes, times reported.
+- E4 (20) Pooling solved locally from several starts (local optima found, e.g. 100 vs 400), globally with the default, with `rlt=True`, and with `solver="amp"`; objectives, bounds, nodes, `termination` and times reported; a reasoned explanation of AMP's weak bound (e.g. the rows its outer approximation skips because they are not proved convex; on the reference install AMP stops at 400 with a bound near 675 while spatial B&B certifies 400).
 - E5 (10) Quadratic gap scaling.
 
 ## Writing (30)
